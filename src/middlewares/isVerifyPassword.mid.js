@@ -1,10 +1,10 @@
-import { readOne } from "../data/mongo/managers/users.manager.js";
+import { readByEmail } from "../data/mongo/managers/users.manager.js";
 
 async function isVerifyPassword(req, res, next) {
   try {
     const { email, password } = req.body;
     //verificamos que el usuario existe
-    const one = await readOne(email);
+    const one = await readByEmail(email);
     if (one) {
       //verificamos que la contraseña es correcta
       const verify = password === one.password;

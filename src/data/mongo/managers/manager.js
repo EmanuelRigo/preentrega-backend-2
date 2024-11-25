@@ -23,7 +23,8 @@ class Manager {
 
   readById = async (id) => {
     try {
-      const one = await this.model.findOne({ _id: id }).lean();
+      const one = await this.model.findOne({ _id: id });
+      console.log(one);
       return one;
     } catch (error) {
       throw error;
@@ -34,15 +35,6 @@ class Manager {
     try {
       const all = await this.model.find(data).lean();
       return all;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  readOne = async (email) => {
-    try {
-      const one = await this.model.findOne({ email }).lean();
-      return one;
     } catch (error) {
       throw error;
     }

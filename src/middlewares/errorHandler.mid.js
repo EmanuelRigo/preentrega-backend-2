@@ -1,7 +1,9 @@
 function errorHandler(error, req, res, next) {
-    const message = `${req.method} ${req.url} - NOT FOUND` + (error.message || "API ERROR")
-    const statusCode = error.statusCode || 500
-    return res.statusCode(statusCode).json({message})
+  console.log(error);
+  const message =
+    req.method + " " + req.url + " - " + (error.message || "API ERROR");
+  const statusCode = error.statusCode || 500;
+  return res.status(statusCode).json({ message });
 }
 
-export default errorHandler
+export default errorHandler;
