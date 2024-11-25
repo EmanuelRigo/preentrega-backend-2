@@ -59,3 +59,49 @@ const validateData = (req, res, next) => {
 ## Contribuciones
 
 Las contribuciones son bienvenidas. Si deseas contribuir a este proyecto, por favor sigue estos pasos
+
+## Clase 3: Implementación de Seguridad
+
+### Agregando Bcrypt para el Hasheo de Contraseñas
+
+En esta clase, hemos integrado la biblioteca **bcrypt** para mejorar la seguridad de las contraseñas en nuestra aplicación. Bcrypt es un algoritmo de hashing que permite almacenar contraseñas de manera segura, protegiéndolas contra ataques de fuerza bruta y otros tipos de vulnerabilidades.
+
+#### Pasos para la Implementación
+
+1. **Instalación de Bcrypt**:
+   Para comenzar, asegúrate de instalar la biblioteca `bcrypt` en tu proyecto. Puedes hacerlo ejecutando el siguiente comando en tu terminal:
+
+   ```bash
+   npm install bcrypt
+   ```
+
+2. **Uso de Bcrypt**:
+   A continuación, puedes utilizar `bcrypt` para hashear las contraseñas antes de almacenarlas en la base de datos. Aquí tienes un ejemplo de cómo hacerlo:
+
+   ```javascript
+   import bcrypt from "bcrypt";
+
+   const saltRounds = 10; // Número de rondas de sal
+
+   // Función para hashear una contraseña
+   const hashPassword = async (password) => {
+     const hash = await bcrypt.hash(password, saltRounds);
+     return hash;
+   };
+
+   // Función para comparar una contraseña con su hash
+   const comparePassword = async (password, hash) => {
+     const match = await bcrypt.compare(password, hash);
+     return match;
+   };
+   ```
+
+3. **Integración en el Registro de Usuarios**:
+   Asegúrate de integrar el hasheo de contraseñas en el proceso de registro de usuarios para que las contraseñas se almacenen de forma segura.
+
+4. **Verificación de Contraseñas**:
+   Utiliza la función de comparación para verificar las contraseñas durante el inicio de sesión.
+
+### Conclusión
+
+La implementación de `bcrypt` es un paso crucial para asegurar la información sensible de los usuarios. Asegúrate de seguir las mejores prácticas de seguridad al manejar contraseñas y datos sensibles en tu aplicación.

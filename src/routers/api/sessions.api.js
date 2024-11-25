@@ -3,16 +3,18 @@ import {
   create,
   readByEmail,
 } from "../../data/mongo/managers/users.manager.js";
-import isVerifyPassword from "../../middlewares/isVerifyPassword.mid.js";
-import isValidUserData from "../../middlewares/isValidUser.mid.js";
+import isValidUser from "../../middlewares/isValidUser.mid.js";
+import isValidUserData from "../../middlewares/isValidUserData.mid.js";
 import isUser from "../../middlewares/isUser.mid.js";
 import { readById } from "../../data/mongo/managers/users.manager.js";
+import createHash from "../../middlewares/createHash.mid.js";
+import verifyHash from "../../middlewares/verifyHash.mid.js";
 
 const sessionsRouter = Router();
 
-sessionsRouter.post("/register", isValidUserData, isUser, register);
+sessionsRouter.post("/register", isValidUserData, isUser, createHash, register);
 
-sessionsRouter.post("/login", isVerifyPassword, login);
+sessionsRouter.post("/login", isValidUser, verifyHash, login);
 
 sessionsRouter.post("/signout", signout);
 
