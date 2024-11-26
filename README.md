@@ -105,3 +105,49 @@ En esta clase, hemos integrado la biblioteca **bcrypt** para mejorar la segurida
 ### Conclusión
 
 La implementación de `bcrypt` es un paso crucial para asegurar la información sensible de los usuarios. Asegúrate de seguir las mejores prácticas de seguridad al manejar contraseñas y datos sensibles en tu aplicación.
+
+## Integración de Passport para Autenticación
+
+Hemos agregado **Passport** para gestionar las rutas de autenticación, incluyendo **login**, **register**, **online** y **signout**. Passport es un middleware de autenticación para Node.js que facilita la implementación de estrategias de autenticación.
+
+### Pasos para la Implementación
+
+1. **Instalación de Passport**:
+   Asegúrate de instalar las bibliotecas necesarias ejecutando el siguiente comando:
+
+   ```bash
+   npm install passport passport-local
+   ```
+
+2. **Configuración de Passport**:
+   Configura Passport en tu aplicación para manejar la autenticación de usuarios. Aquí tienes un ejemplo básico de cómo hacerlo:
+
+   ```javascript
+   import passport from "passport";
+   import LocalStrategy from "passport-local";
+
+   // Estrategia de autenticación local
+   passport.use(
+     new LocalStrategy(async (username, password, done) => {
+       // Lógica para encontrar el usuario y verificar la contraseña
+       // ...
+     })
+   );
+
+   // Serialización y deserialización de usuarios
+   passport.serializeUser((user, done) => {
+     done(null, user.id);
+   });
+
+   passport.deserializeUser(async (id) => {
+     // Lógica para encontrar el usuario por ID
+     // ...
+   });
+   ```
+
+3. **Rutas de Autenticación**:
+   Asegúrate de definir las rutas para **login**, **register**, **online** y **signout** utilizando Passport para manejar las solicitudes de autenticación.
+
+### Conclusión
+
+La integración de Passport mejora la seguridad y la gestión de usuarios en tu aplicación, facilitando la implementación de diferentes estrategias de autenticación.
