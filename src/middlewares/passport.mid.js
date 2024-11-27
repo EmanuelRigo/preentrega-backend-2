@@ -4,6 +4,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { readByEmail, create } from "../data/mongo/managers/users.manager.js";
 import { createHashUtil } from "../utils/hash.util.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
+import { createTokenUtil } from "../utils/token.util.js";
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = process.env;
 
@@ -48,24 +49,38 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const one = await readByEmail(email);
-        if (!one) {
+        console.log("Iniciando proceso de autenticación para el email:", email);
+
+        const user = await readByEmail(email);
+        if (!user) {
+          console.log("Usuario no encontrado para el email:", email);
           const error = new Error("INVALID CREDENTIALS");
           error.statusCode = 401;
           return done(error);
         }
 
-        const dbPassword = one.password;
+        const dbPassword = user.password;
+        console.log(
+          "Contraseña de la base de datos recuperada para el usuario:",
+          email
+        );
+
         const verify = verifyHashUtil(password, dbPassword);
         if (!verify) {
-          const error = new Error("INVALID CREDENCTIALS");
+          console.log(
+            "La contraseña proporcionada es incorrecta para el usuario:",
+            email
+          );
+          const error = new Error("INVALID CREDENTIALS");
           error.statusCode = 401;
           return done(error);
         }
-        req.session.role = one.role;
-        req.session.user_id = one._id;
-        return done(null, one);
+
+        req.token = createTokenUtil({ role: user.role, user: user._id });
+        console.log("Token generado para el usuario:", user._id);
+        return done(null, user);
       } catch (error) {
+        console.error("Error durante el proceso de autenticación:", error);
         return done(error);
       }
     }
@@ -100,9 +115,11 @@ passport.use(
             password: createHashUtil(id),
           });
         }
-
-        req.session.role = user.role;
-        req.session.user_id = user._id;
+        req.token = createTokenUtil({ role: user.role, user: user._id });
+        console.log("token:", token);
+        // LOS DATOS DE LA SESSION SE DEBEN GUARDAR EN UN TOKEN
+        // req.session.role = user.role;
+        // req.session.user_id = user._id;
         return done(null, user);
       } catch (error) {
         return done(error);

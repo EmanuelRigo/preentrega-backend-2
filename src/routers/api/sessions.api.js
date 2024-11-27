@@ -53,11 +53,14 @@ async function register(req, res, next) {
 
 async function login(req, res, next) {
   try {
-    const user = req.user;
-    console.log(user);
+    // const user = req.user;
+    // return res
+    //   .status(200)
+    //   .json({ message: "USER LOGGED IN", user_id: user._id });
+
     return res
       .status(200)
-      .json({ message: "USER LOGGED IN", user_id: user._id });
+      .json({ message: "USER LOGGED IN", token: req.token });
   } catch (error) {
     return next(error);
   }
@@ -93,10 +96,9 @@ async function online(req, res, next) {
 
 async function google(req, res, next) {
   try {
-    const user = req.user;
     return res
       .status(200)
-      .json({ message: "USER LOGGED IN", user_id: user._id });
+      .json({ message: "USER LOGGED IN", token: req.token });
   } catch (error) {
     return next(error);
   }
