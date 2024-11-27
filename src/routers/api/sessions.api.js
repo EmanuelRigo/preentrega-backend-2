@@ -26,6 +26,20 @@ sessionsRouter.post("/signout", signout);
 
 sessionsRouter.post("/online", online);
 
+// llama a la pantalla de consentimiento y auntenticar google
+sessionsRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+// /api/session/google/cb va a llamar efectivamente a la estrategia
+
+sessionsRouter.get(
+  "/google/cb",
+  passport.authenticate("google", { session: false }),
+  google
+);
+
 async function register(req, res, next) {
   try {
     const user = req.user;
@@ -77,4 +91,14 @@ async function online(req, res, next) {
   }
 }
 
+async function google(req, res, next) {
+  try {
+    const user = req.user;
+    return res
+      .status(200)
+      .json({ message: "USER LOGGED IN", user_id: user._id });
+  } catch (error) {
+    return next(error);
+  }
+}
 export default sessionsRouter;

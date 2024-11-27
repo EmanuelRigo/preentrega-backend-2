@@ -151,3 +151,51 @@ Hemos agregado **Passport** para gestionar las rutas de autenticación, incluyen
 ### Conclusión
 
 La integración de Passport mejora la seguridad y la gestión de usuarios en tu aplicación, facilitando la implementación de diferentes estrategias de autenticación.
+
+## Clase 4: Integración de Estrategia de Autenticación con Google
+
+En esta clase, implementaremos la estrategia de autenticación utilizando Google. Esto permitirá a los usuarios iniciar sesión en nuestra aplicación utilizando sus cuentas de Google, mejorando la experiencia del usuario y facilitando el acceso.
+
+### Pasos para la Implementación
+
+1. **Configuración de Google Developer Console**:
+
+   - Crea un nuevo proyecto en la [Google Developer Console](https://console.developers.google.com/).
+   - Habilita la API de Google+.
+   - Configura las credenciales de OAuth 2.0 y obtén el `Client ID` y `Client Secret`.
+
+2. **Instalación de Dependencias**:
+   Asegúrate de tener instaladas las bibliotecas necesarias para la autenticación con Google:
+
+   ```bash
+   npm install passport-google-oauth20
+   ```
+
+3. **Configuración de Passport**:
+   Configura Passport para utilizar la estrategia de Google. Aquí tienes un ejemplo básico:
+
+   ```javascript
+   import passport from "passport";
+   import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+
+   passport.use(
+     new GoogleStrategy(
+       {
+         clientID: process.env.GOOGLE_CLIENT_ID,
+         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+         callbackURL: "/api/session/google/cb",
+       },
+       async (accessToken, refreshToken, profile, done) => {
+         // Lógica para manejar la autenticación con Google
+         // ...
+       }
+     )
+   );
+   ```
+
+4. **Rutas de Autenticación**:
+   Asegúrate de definir las rutas para **login**, **register**, **online** y **signout** utilizando Passport para manejar las solicitudes de autenticación.
+
+### Conclusión
+
+La integración de Google mejora la seguridad y la experiencia del usuario en tu aplicación, facilitando el acceso utilizando cuentas de Google.
