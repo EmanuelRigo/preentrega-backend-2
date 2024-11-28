@@ -1,0 +1,78 @@
+PREENTREGA-BACKEND-2
+ ┣ public
+ ┃  ┣ scripts
+ ┃  ┃  ┣ cart.js
+ ┃  ┃  ┣ createProduct.js
+ ┃  ┃  ┣ index.js
+ ┃  ┃  ┣ login.js
+ ┃  ┃  ┣ navbar.js
+ ┃  ┃  ┣ products.js
+ ┃  ┃  ┗ register.js
+ ┃  ┣ cart.html
+ ┃  ┣ createProduct.html
+ ┃  ┣ index.html
+ ┃  ┣ login.html
+ ┃  ┣ products.html
+ ┃  ┣ profile.html
+ ┃  ┗ register.html
+ ┣ src
+ ┃  ┣ dao
+ ┃  ┃  ┣ models
+ ┃  ┃  ┃  ┣ cart.model.js
+ ┃  ┃  ┃  ┗ product.model.js
+ ┃  ┃  ┣ cart.controller.js
+ ┃  ┃  ┗ product.controller.js
+ ┃  ┣ data
+ ┃  ┃  ┣ fs
+ ┃  ┃  ┃  ┗ sessions
+ ┃  ┃  ┃     ┣ 2CeJ9NGxckr1lWCMiWnybe1s4R5N8dDs.json
+ ┃  ┃  ┃     ┣ 4wESRhQQJ_ckMp_JFecmCp1PP9T_3dDy.json
+ ┃  ┃  ┃     ┣ hD8vdtleDxJqO7VQWUSe0PbQ_dspGFLb.json
+ ┃  ┃  ┃     ┣ iEDkDsptgu0fhen_HV_OTxVVWv9Ft_ZK.json
+ ┃  ┃  ┃     ┗ Mw9YoRbKQKoEVgvtqE8ER-VmTcyza8z-.json
+ ┃  ┃  ┗ mongo
+ ┃  ┃     ┣ managers
+ ┃  ┃     ┃  ┣ manager.js
+ ┃  ┃     ┃  ┣ product.manager.js
+ ┃  ┃     ┃  ┗ users.manager.js
+ ┃  ┃     ┗ models
+ ┃  ┃        ┣ movies.model.js
+ ┃  ┃        ┣ product.model.js
+ ┃  ┃        ┗ user.model.js
+ ┃  ┣ middlewares
+ ┃  ┃  ┣ createHash.mid.js
+ ┃  ┃  ┣ errorHandler.mid.js
+ ┃  ┃  ┣ isUser.mid.js
+ ┃  ┃  ┣ isValidUser.mid.js
+ ┃  ┃  ┣ isValidUserData.mid.js
+ ┃  ┃  ┣ passport.mid.js
+ ┃  ┃  ┣ pathHandler.mid.js
+ ┃  ┃  ┗ verifyHash.mid.js
+ ┃  ┣ routers
+ ┃  ┃  ┣ api
+ ┃  ┃  ┃  ┣ cookies.api.js
+ ┃  ┃  ┃  ┣ index.api.js
+ ┃  ┃  ┃  ┣ movies.api.js
+ ┃  ┃  ┃  ┣ products.api.js
+ ┃  ┃  ┃  ┗ sessions.api.js
+ ┃  ┃  ┣ views
+ ┃  ┃  ┃  ┣ layouts
+ ┃  ┃  ┃  ┃  ┗ main.handlebars
+ ┃  ┃  ┃  ┣ cart.handlebars
+ ┃  ┃  ┃  ┣ carts.handlebars
+ ┃  ┃  ┃  ┣ home.handlebars
+ ┃  ┃  ┃  ┣ product.handlebars
+ ┃  ┃  ┃  ┗ realTimeProducts.handlebars
+ ┃  ┃  ┣ index.router.js
+ ┃  ┃  ┗ views.router.js
+ ┃  ┗ utils
+ ┃     ┣ dbConnect.utils.js
+ ┃     ┣ hash.util.js
+ ┃     ┗ token.util.js
+ ┣ .env
+ ┣ .gitignore
+ ┣ config.js
+ ┣ index.js
+ ┣ package-lock.json
+ ┣ package.json
+ ┗ README.md
