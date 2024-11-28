@@ -114,6 +114,10 @@ router.get("/carts/:cid", async (req, res) => {
   res.status(200).render("cart", { cart });
 });
 
+router.get("/register", (req, res) => {
+  res.status(200).render("register");
+});
+
 //////////////////////////////////////////////////////
 router.get("/realTimeProducts", (req, res) => {
   res.status(200).render("realTimeProducts");
