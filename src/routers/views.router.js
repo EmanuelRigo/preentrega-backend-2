@@ -15,9 +15,10 @@ router.get("/products", async (req, res) => {
     if (queryParams.toString()) {
       url += `?${queryParams.toString()}`;
     }
-    console.log("url:", url);
+    console.log("url://////////", url);
     const response = await fetch(url);
     const products = await response.json();
+    console.log("products:", products);
     res.render("home", { products: products.data });
   } catch (error) {
     console.error("Error al obtener productos:", error);
@@ -66,7 +67,7 @@ router.get("/:cid/products", async (req, res) => {
   const cid = req.params.cid;
 
   try {
-    let url = "http://localhost:8080/api/products";
+    let url = "http://localhost:9000/api/products";
 
     const queryParams = new URLSearchParams(req.query);
 
@@ -95,7 +96,7 @@ router.get("/realTimeProducts/paginated/:pg", (req, res) => {
 
 router.get("/carts", async (req, res) => {
   try {
-    const response = await fetch("http://localhost:8080/api/carts");
+    const response = await fetch("http://localhost:9000/api/carts");
     const carts = await response.json();
     //  console.log('carts:',carts)
     res.render("carts", { carts: carts.data });

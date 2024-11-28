@@ -5,8 +5,11 @@ import {
   update,
   destroy,
 } from "../../data/mongo/managers/product.manager.js";
+import ProductController from "../../dao/product.controller.js";
 
 const productsApiRouter = Router();
+
+const controller = new ProductController();
 
 productsApiRouter.post("/", async (req, res, next) => {
   try {
@@ -19,13 +22,53 @@ productsApiRouter.post("/", async (req, res, next) => {
   }
 });
 
-productsApiRouter.get("/", async (req, res, next) => {
+productsApiRouter.get("/", async (req, res) => {
   try {
-    const message = "PRODUCT FOUND";
-    const response = await read();
-    return res.status(200).json({ response, message });
-  } catch (error) {
-    return next(error);
+    const { limit = 10, page = 1, sort, query, available } = req.query;
+
+    const limitNumber = parseInt(limit, 10);
+    const pageNumber = parseInt(page, 10);
+
+    if (isNaN(limitNumber) || limitNumber <= 0) {
+      return res
+        .status(400)
+        .send({ error: "El parámetro 'limit' debe ser un número positivo." });
+    }
+
+    if (isNaN(pageNumber) || pageNumber <= 0) {
+      return res
+        .status(400)
+        .send({ error: "El parámetro 'page' debe ser un número positivo." });
+    }
+    const filter = {};
+    if (query) {
+      console.log("si query", query);
+      filter.category = query;
+      console.log("filter::", filter);
+    }
+
+    if (available) {
+      if (available === "true") {
+        filter.status = true;
+      } else if (available === "false") {
+        filter.status = false;
+      }
+      console.log("filter con disponibilidad:", filter);
+    }
+
+    const options = {
+      limit: limitNumber,
+      page: pageNumber,
+      sort,
+      filter: filter,
+    };
+
+    const data = await controller.get(options);
+
+    res.status(200).send({ error: null, data });
+  } catch (err) {
+    console.error("Error al obtener productos:", err);
+    res.status(500).send({ error: "Error interno del servidor" });
   }
 });
 

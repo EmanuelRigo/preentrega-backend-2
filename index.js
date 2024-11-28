@@ -24,7 +24,7 @@ server.listen(port, ready);
 
 // Activo el motor de plantillas
 server.engine("handlebars", handlebars.engine());
-server.set("views", `${config.DIRNAME}/src/routers/views`); // Asegúrate de que esta ruta sea correcta
+server.set("views", `${config.DIRNAME}/src/routers/views`);
 server.set("view engine", "handlebars");
 
 //middlewares

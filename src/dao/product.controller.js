@@ -13,39 +13,26 @@ class ProductController {
 
   get = async (options) => {
     try {
-      const { limit , page , sort, filter } = options;
+      const { limit, page, sort, filter } = options;
 
-      let sortOptions;
+      let sortOptions = {};
       if (sort) {
-        if (sort === 'asc') {
-          sortOptions = { price: 1 };
-        } else if (sort === 'desc') {
-          sortOptions = { price: -1 };
-        } else {
-          console.error('Invalid sort option'); // Manejo de errores para valores no válidos
-        }
+        sortOptions = sort === "asc" ? { price: 1 } : { price: -1 };
       }
 
-      if (!filter || Object.keys(filter).length === 0) {
-        return await productModel.paginate({}, {
-          limit: limit,
-          page: parseInt(page, 10),
-          sort: sortOptions,
-          lean: true
-        });
-      }
+      const query = filter || {};
 
-      return await productModel.paginate(filter, {
+      return await productModel.paginate(query, {
         limit: parseInt(limit, 10),
         page: parseInt(page, 10),
         sort: sortOptions,
-        lean: true
+        lean: true,
       });
     } catch (err) {
+      console.error("Error en get:", err);
       return err.message;
     }
   };
-
   getOne = async (data) => {
     try {
       console.log("data:", data);
