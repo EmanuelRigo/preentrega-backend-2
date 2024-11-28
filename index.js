@@ -10,31 +10,42 @@ import dbConnect from "./src/utils/dbconnect.utils.js";
 import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
 import config from "./config.js";
+import http from "http";
+import { Server } from "socket.io";
 
 //server
-const server = express();
+const app = express();
 const port = process.env.PORT;
 
-const ready = () => {
-  console.log("server ready on port:" + port);
-  dbConnect();
-};
+// Crea un servidor HTTP
+const server = http.createServer(app);
 
-server.listen(port, ready);
+// Configura Socket.IO
+const io = new Server(server);
 
-// Activo el motor de plantillas
-server.engine("handlebars", handlebars.engine());
-server.set("views", `${config.DIRNAME}/src/routers/views`);
-server.set("view engine", "handlebars");
+// Manejo de conexiones de Socket.IO
+io.on("connection", (socket) => {
+  console.log("Un usuario se ha conectado");
+
+  // Aquí puedes manejar eventos de Socket.IO
+  socket.on("disconnect", () => {
+    console.log("Un usuario se ha desconectado");
+  });
+});
+
+// Configuración del motor de plantillas
+app.engine("handlebars", handlebars.engine());
+app.set("view engine", "handlebars");
+app.set("views", `${config.DIRNAME}/src/routers/views`);
 
 //middlewares
-server.use(express.json());
-server.use(express.urlencoded({ extended: true }));
-server.use(morgan("dev"));
-server.use(cookieParser(process.env.SECRET_KEY));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(cookieParser(process.env.SECRET_KEY));
 
 // Configuración de sesión con MongoDB
-server.use(
+app.use(
   session({
     secret: process.env.SECRET_KEY,
     resave: true,
@@ -47,6 +58,12 @@ server.use(
 );
 
 //routers
-server.use(indexRouter);
-server.use(errorHandler);
-server.use(pathHandler);
+app.use(indexRouter);
+app.use(errorHandler);
+app.use(pathHandler);
+
+// Iniciar el servidor
+server.listen(port, () => {
+  console.log(`Servidor listo en el puerto: ${port}`);
+  dbConnect();
+});

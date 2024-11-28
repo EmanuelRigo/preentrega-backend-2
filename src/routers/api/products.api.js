@@ -72,6 +72,11 @@ productsApiRouter.get("/", async (req, res) => {
   }
 });
 
+productsApiRouter.get("/all", async (req, res) => {
+  const data = await controller.getAll();
+  res.status(200).send({ error: null, data });
+});
+
 productsApiRouter.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
