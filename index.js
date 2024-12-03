@@ -20,6 +20,11 @@ const port = process.env.PORT;
 // Crea un servidor HTTP
 const server = http.createServer(app);
 
+// Iniciar el servidor
+server.listen(port, () => {
+  console.log(`Servidor listo en el puerto: ${port}`);
+  dbConnect();
+});
 // Configura Socket.IO
 const io = new Server(server);
 
@@ -61,9 +66,3 @@ app.use(
 app.use(indexRouter);
 app.use(errorHandler);
 app.use(pathHandler);
-
-// Iniciar el servidor
-server.listen(port, () => {
-  console.log(`Servidor listo en el puerto: ${port}`);
-  dbConnect();
-});

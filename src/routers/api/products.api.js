@@ -1,26 +1,34 @@
 import { Router } from "express";
 import {
-  read,
   create,
+  readById,
   update,
   destroy,
+  getAll,
+  getFiltered,
+  getPaginated,
 } from "../../data/mongo/managers/product.manager.js";
-import ProductController from "../../dao/product.controller.js";
+//import ProductController from "../../dao/product.controller.js";
+import passport from "../../middlewares/passport.mid.js";
 
 const productsApiRouter = Router();
 
-const controller = new ProductController();
+//const controller = new ProductController();
 
-productsApiRouter.post("/", async (req, res, next) => {
-  try {
-    const message = "PRODUCT CREATED";
-    const data = req.body;
-    const response = await create(data);
-    return res.status(201).json({ response, message });
-  } catch {
-    return next(error);
+productsApiRouter.post(
+  "/",
+  // passport.authenticate("admin", { session: false }),
+  async (req, res, next) => {
+    try {
+      const message = "PRODUCT CREATED";
+      const data = req.body;
+      const response = await create(data);
+      return res.status(201).json({ response, message });
+    } catch {
+      return next(error);
+    }
   }
-});
+);
 
 productsApiRouter.get("/", async (req, res) => {
   try {
@@ -63,7 +71,7 @@ productsApiRouter.get("/", async (req, res) => {
       filter: filter,
     };
 
-    const data = await controller.get(options);
+    const data = await getFiltered(options);
 
     res.status(200).send({ error: null, data });
   } catch (err) {
@@ -73,38 +81,46 @@ productsApiRouter.get("/", async (req, res) => {
 });
 
 productsApiRouter.get("/all", async (req, res) => {
-  const data = await controller.getAll();
+  const data = await getAll();
   res.status(200).send({ error: null, data });
 });
 
-productsApiRouter.put("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
+productsApiRouter.put(
+  "/:id",
+  passport.authenticate("admin", { session: false }),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
 
-    const data = req.body;
+      const data = req.body;
 
-    const message = "PRODUCT UPDATED";
+      const message = "PRODUCT UPDATED";
 
-    const response = await update(id, data);
+      const response = await update(id, data);
 
-    return res.status(200).json({ response, message });
-  } catch (error) {
-    return next(error);
+      return res.status(200).json({ response, message });
+    } catch (error) {
+      return next(error);
+    }
   }
-});
+);
 
-productsApiRouter.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
+productsApiRouter.delete(
+  "/:id",
+  passport.authenticate("admin", { session: false }),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
 
-    const message = "PRODUCT DELETED";
+      const message = "PRODUCT DELETED";
 
-    const response = await destroy(id);
+      const response = await destroy(id);
 
-    return res.status(200).json({ response, message });
-  } catch (error) {
-    return next(error);
+      return res.status(200).json({ response, message });
+    } catch (error) {
+      return next(error);
+    }
   }
-});
+);
 
 export default productsApiRouter;

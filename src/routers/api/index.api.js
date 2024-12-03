@@ -2,7 +2,7 @@ import { Router } from "express";
 import productsApiRouter from "./products.api.js";
 import cookiesRouter from "./cookies.api.js";
 import sessionsRouter from "./sessions.api.js";
-import cartApiRouter from "./carts.router.js";
+import cartApiRouter from "./carts.api.js";
 
 const apiRouter = Router();
 

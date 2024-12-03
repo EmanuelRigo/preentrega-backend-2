@@ -1,7 +1,17 @@
 import { Router } from "express";
 
 import ProductController from "../dao/product.controller.js";
-import CartController from "../dao/cart.controller.js";
+import CartController from "../data/mongo/managers/cart.manager.js";
+
+import {
+  create,
+  readById,
+  update,
+  destroy,
+  getAll,
+  getFiltered,
+  getPaginated,
+} from "../data/mongo/managers/product.manager.js";
 
 const CaController = new CartController();
 const ProController = new ProductController();
@@ -33,7 +43,8 @@ router.get("/products/:pid", async (req, res) => {
   try {
     console.log("pid:", pid);
 
-    const product = await ProController.getOne({ _id: pid });
+    // Añadir .lean() a la consulta
+    const product = await readById({ _id: pid });
     res.render("product", { product });
   } catch (error) {
     console.error("Error al obtener productos:", error);
@@ -59,7 +70,7 @@ router.get("/:cid/products/:pid", async (req, res) => {
 
 router.get("/products/paginated/:pg", async (req, res) => {
   const pg = req.params.pg;
-  const products = await ProController.getPaginated(pg);
+  const products = await getPaginated(pg);
   res.status(200).render("home", { products });
 });
 
@@ -116,6 +127,10 @@ router.get("/carts/:cid", async (req, res) => {
 
 router.get("/register", (req, res) => {
   res.status(200).render("register");
+});
+
+router.get("/login", (req, res) => {
+  res.status(200).render("login");
 });
 
 //////////////////////////////////////////////////////

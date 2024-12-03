@@ -10,23 +10,34 @@ import verifyHash from "../../middlewares/verifyHash.mid.js";
 
 const sessionsRouter = Router();
 
+//REGISTER
 sessionsRouter.post(
   "/register",
   passport.authenticate("register", { session: false }),
   register
 );
 
+//LOGIN
 sessionsRouter.post(
   "/login",
   passport.authenticate("login", { session: false }),
   login
 );
 
-sessionsRouter.post("/signout", signout);
+//SINGOUT
+sessionsRouter.post(
+  "/signout",
+  passport.authenticate("singout", { session: false }),
+  signout
+);
+//ONLINE
+sessionsRouter.post(
+  "/online",
+  passport.authenticate("online", { session: false }),
+  onlineToken
+);
 
-sessionsRouter.post("/online", online);
-
-// llama a la pantalla de consentimiento y auntenticar google
+// GOOGLE
 sessionsRouter.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
@@ -66,20 +77,18 @@ async function login(req, res, next) {
   }
 }
 
-async function signout(req, res, next) {
-  try {
-    req.session.destroy();
-    return res.status(200).json({ message: "USER SINGNED OUT" });
-  } catch (error) {
-    return next(error);
-  }
+function signout(req, res, next) {
+  const message = "User signed out!";
+  const response = "OK";
+  return res.clearCookie("token").json200(response, message);
 }
 
 async function online(req, res, next) {
   try {
-    const { user_id } = req.session;
-    const one = await readById(user_id);
-    if (req.session.user_id) {
+    const { token } = req.headers;
+    const data = verifyTokenUtil(token);
+    const one = await readById(data.user_id);
+    if (one) {
       return res.status(200).json({
         message: one.email.toUpperCase() + " IS ONLINE",
         online: true,
@@ -94,6 +103,18 @@ async function online(req, res, next) {
   }
 }
 
+async function onlineToken(req, res, next) {
+  try {
+    console.log("req.user:", req.user);
+    return res.status(200).json({
+      message: req.user.email.toUpperCase() + "IS ONLINE",
+      online: true,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function google(req, res, next) {
   try {
     return res
@@ -103,4 +124,5 @@ async function google(req, res, next) {
     return next(error);
   }
 }
+
 export default sessionsRouter;

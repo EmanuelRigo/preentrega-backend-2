@@ -1,13 +1,20 @@
 import passport, { Passport } from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
-import { readByEmail, create } from "../data/mongo/managers/users.manager.js";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import {
+  readByEmail,
+  create,
+  readById,
+  update,
+} from "../data/mongo/managers/users.manager.js";
 import { createHashUtil } from "../utils/hash.util.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
-import { createTokenUtil } from "../utils/token.util.js";
+import { createTokenUtil, verifyTokenUtil } from "../utils/token.util.js";
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = process.env;
 
+//--REGISTER
 passport.use(
   "register",
   new LocalStrategy(
@@ -17,15 +24,10 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        if (!email || !password) {
-          //no hace falta definirlo por que passport responde por defecto
-        }
-        const one = await readByEmail(email);
-        if (one) {
+        const userExists = await readByEmail(email);
+        if (userExists) {
           const error = new Error("User already exists");
           error.statusCode = 400;
-          // throw error;
-          // no se retorna el error porque en cambio se usa DONE
           return done(error);
         }
         req.body.password = createHashUtil(password);
@@ -39,7 +41,7 @@ passport.use(
     }
   )
 );
-
+//--LOGIN
 passport.use(
   "login",
   new LocalStrategy(
@@ -67,17 +69,17 @@ passport.use(
 
         const verify = verifyHashUtil(password, dbPassword);
         if (!verify) {
-          console.log(
-            "La contraseña proporcionada es incorrecta para el usuario:",
-            email
-          );
           const error = new Error("INVALID CREDENTIALS");
           error.statusCode = 401;
           return done(error);
         }
 
-        req.token = createTokenUtil({ role: user.role, user: user._id });
+        const token = createTokenUtil({ role: user.role, user: user._id });
+        req.token = token;
+        await update(user._id, { isOnline: true });
+        console.log(req.token);
         console.log("Token generado para el usuario:", user._id);
+        console.log(user);
         return done(null, user);
       } catch (error) {
         console.error("Error durante el proceso de autenticación:", error);
@@ -86,7 +88,31 @@ passport.use(
     }
   )
 );
-
+//--ADMIN
+passport.use(
+  "admin",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.SECRET_KEY,
+    },
+    (data, done) => {
+      try {
+        console.log(data);
+        const { user_id, role } = data;
+        if (role !== "ADMIN") {
+          const error = new Error("NOT AUTHORIZED");
+          error.statusCode = 403;
+          return done(error);
+        }
+        return done(null, { user_id });
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+//--GOOGLE
 passport.use(
   "google",
   new GoogleStrategy(
@@ -120,6 +146,56 @@ passport.use(
         // LOS DATOS DE LA SESSION SE DEBEN GUARDAR EN UN TOKEN
         // req.session.role = user.role;
         // req.session.user_id = user._id;
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+//--SINGOUT
+passport.use(
+  "singout",
+  new LocalStrategy(
+    { passReqToCallback: true, usernameField: "email" },
+    async (req, email, password, done) => {
+      try {
+        const token = req.token;
+        if (!token) {
+          const error = new Error("USER NOT LOGED");
+          error.statusCode = 401;
+          return done(error);
+        }
+        delete req.token;
+        return done(null, null);
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+//--ONLINE
+passport.use(
+  "online",
+  new LocalStrategy(
+    {
+      // passReqToCallback: true,
+      // usernameField: "email",
+      // passwordField: "password",
+    },
+    async (req, email, password, done) => {
+      try {
+        console.log("hola");
+        // const token = req.token;
+        // console.log("token:", token);
+        // const { user_id } = verifyTokenUtil(token);
+        // const user = await readById(user_id);
+        // const { isOnline } = user;
+        // if (!isOnline) {
+        //   const error = new Error("USER IS NOT ONLINE");
+        //   error.statusCode = 401;
+        //   return done(error);
+        // }
         return done(null, user);
       } catch (error) {
         return done(error);

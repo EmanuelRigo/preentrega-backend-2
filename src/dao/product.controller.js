@@ -2,7 +2,7 @@ import productModel from "./models/product.model.js";
 
 class ProductController {
   constructor() {}
-
+  //listo
   getAll = async () => {
     try {
       return await productModel.find().lean();
@@ -10,7 +10,7 @@ class ProductController {
       return err.message;
     }
   };
-
+  //listo
   get = async (options) => {
     try {
       const { limit, page, sort, filter } = options;
@@ -33,6 +33,7 @@ class ProductController {
       return err.message;
     }
   };
+  //listo
   getOne = async (data) => {
     try {
       console.log("data:", data);
