@@ -27,15 +27,11 @@ sessionsRouter.post(
 //SINGOUT
 sessionsRouter.post(
   "/signout",
-  passport.authenticate("singout", { session: false }),
-  signout
+  // passport.authenticate("signout", { session: false }),
+  signout2
 );
 //ONLINE
-sessionsRouter.post(
-  "/online",
-  passport.authenticate("online", { session: false }),
-  onlineToken
-);
+sessionsRouter.post("/online", online2);
 
 // GOOGLE
 sessionsRouter.get(
@@ -64,11 +60,6 @@ async function register(req, res, next) {
 
 async function login(req, res, next) {
   try {
-    // const user = req.user;
-    // return res
-    //   .status(200)
-    //   .json({ message: "USER LOGGED IN", user_id: user._id });
-
     return res
       .status(200)
       .json({ message: "USER LOGGED IN", token: req.token });
@@ -83,9 +74,19 @@ function signout(req, res, next) {
   return res.clearCookie("token").json200(response, message);
 }
 
+function signout2(req, res, next) {
+  try {
+    req.session.destroy();
+    return res.status(200).json({ message: "USER SIGNED OUT" });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function online(req, res, next) {
   try {
     const { token } = req.headers;
+    console.log(req.headers);
     const data = verifyTokenUtil(token);
     const one = await readById(data.user_id);
     if (one) {
@@ -93,6 +94,20 @@ async function online(req, res, next) {
         message: one.email.toUpperCase() + " IS ONLINE",
         online: true,
       });
+    } else {
+      return res
+        .status(400)
+        .json({ message: "USER IS NOT ONLINE", online: false });
+    }
+  } catch (error) {
+    return next(error);
+  }
+}
+
+function online2(req, res, next) {
+  try {
+    if (req.session.user_id) {
+      return res.status(200).json({ message: "USER IS ONLINE", online: true });
     } else {
       return res
         .status(400)

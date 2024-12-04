@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const cookiesRouter = Router();
 
-cookiesRouter.get("/create", (req, res, next) => {
+cookiesRouter.post("/create", (req, res, next) => {
   try {
     const message = "COOKIE CREADA";
     return res
@@ -18,7 +18,7 @@ cookiesRouter.get("/create", (req, res, next) => {
 cookiesRouter.get("/read", (req, res, next) => {
   try {
     const cookies = req.cookies;
-    console.log(cookies["modo"]);
+    console.log(cookies);
     const message = "COOKIE LEIDA";
     return res.status(200).json({ message });
   } catch (error) {
@@ -26,7 +26,7 @@ cookiesRouter.get("/read", (req, res, next) => {
   }
 });
 
-cookiesRouter.get("/destroy/:cookieABorrar", (req, res, next) => {
+cookiesRouter.delete("/destroy/:cookieABorrar", (req, res, next) => {
   try {
     const { cookieABorrar } = req.params;
     const message = "COOKIE DESTROYED";

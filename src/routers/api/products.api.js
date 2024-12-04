@@ -17,7 +17,7 @@ const productsApiRouter = Router();
 
 productsApiRouter.post(
   "/",
-  // passport.authenticate("admin", { session: false }),
+  passport.authenticate("admin", { session: false }),
   async (req, res, next) => {
     try {
       const message = "PRODUCT CREATED";

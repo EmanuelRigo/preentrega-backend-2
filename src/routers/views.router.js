@@ -1,23 +1,14 @@
 import { Router } from "express";
-
-import ProductController from "../dao/product.controller.js";
 import CartController from "../data/mongo/managers/cart.manager.js";
-
 import {
-  create,
   readById,
-  update,
-  destroy,
-  getAll,
-  getFiltered,
   getPaginated,
 } from "../data/mongo/managers/product.manager.js";
 
 const CaController = new CartController();
-const ProController = new ProductController();
-
 const router = Router();
 
+//ok
 router.get("/products", async (req, res) => {
   try {
     let url = "http://localhost:9000/api/products";
@@ -38,6 +29,7 @@ router.get("/products", async (req, res) => {
   }
 });
 
+//ok
 router.get("/products/:pid", async (req, res) => {
   const pid = req.params.pid;
   try {
@@ -54,6 +46,7 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
+//ok
 router.get("/:cid/products/:pid", async (req, res) => {
   const pid = req.params.pid;
   const cid = req.params.cid;
@@ -68,12 +61,14 @@ router.get("/:cid/products/:pid", async (req, res) => {
   }
 });
 
+//ok
 router.get("/products/paginated/:pg", async (req, res) => {
   const pg = req.params.pg;
   const products = await getPaginated(pg);
   res.status(200).render("home", { products });
 });
 
+//ok
 router.get("/:cid/products", async (req, res) => {
   const cid = req.params.cid;
 
@@ -96,6 +91,7 @@ router.get("/:cid/products", async (req, res) => {
   }
 });
 
+//ok
 router.get("/realTimeProducts", (req, res) => {
   res.status(200).render("realTimeProducts");
 });
@@ -105,6 +101,7 @@ router.get("/realTimeProducts/paginated/:pg", (req, res) => {
   res.status(200).render("realTimeProducts", { pg });
 });
 
+//ok
 router.get("/carts", async (req, res) => {
   try {
     const response = await fetch("http://localhost:9000/api/carts");
@@ -119,6 +116,7 @@ router.get("/carts", async (req, res) => {
   }
 });
 
+//ok
 router.get("/carts/:cid", async (req, res) => {
   const cid = req.params.cid;
   const cart = await CaController.getOne({ _id: cid });
@@ -133,8 +131,4 @@ router.get("/login", (req, res) => {
   res.status(200).render("login");
 });
 
-//////////////////////////////////////////////////////
-router.get("/realTimeProducts", (req, res) => {
-  res.status(200).render("realTimeProducts");
-});
 export default router;
