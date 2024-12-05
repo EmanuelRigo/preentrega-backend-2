@@ -1,4 +1,4 @@
-import passport, { Passport } from "passport";
+import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
@@ -37,7 +37,6 @@ passport.use(
       } catch (error) {
         return done(error);
       }
-      //la estrategia de passport es para simplificar los middlewares e incluso register
     }
   )
 );
@@ -48,15 +47,9 @@ passport.use(
     {
       passReqToCallback: true,
       usernameField: "email",
-      passwordField: "password",
     },
     async (req, email, password, done) => {
       try {
-        console.log("Datos recibidos:", {
-          email,
-          password: "***",
-        });
-
         if (!email || !password) {
           const error = new Error("EMAIL AND PASSWORD ARE REQUIRED");
           error.statusCode = 400;
@@ -76,31 +69,35 @@ passport.use(
           error.statusCode = 401;
           return done(error);
         }
-
-        // Crear la sesión con el formato correcto
-        req.session.online = true;
-        req.session.role = user.role;
-        req.session.user_id = user._id;
-
-        // Configurar la cookie
-        req.session.cookie = {
-          originalMaxAge: null,
-          expires: null,
-          httpOnly: true,
-          path: "/",
-        };
-
-        const token = createTokenUtil({ role: user.role, user: user._id });
-        req.token = token;
-
         await update(user._id, { isOnline: true });
 
-        console.log("Sesión creada:", {
-          online: req.session.online,
-          email: req.session.email,
-          cookie: req.session.cookie,
-        });
+        const data = {
+          user_id: user._id,
+          role: user.role,
+          isOnline: true,
+        };
 
+        const token = createTokenUtil(data);
+        req.token = token;
+
+        // // Configurar la cookie
+
+        // req.session.cookie = {
+        //   originalMaxAge: null,
+        //   expires: null,
+        //   httpOnly: true,
+        //   path: "/",
+        // };
+
+        // await update(user._id, { isOnline: true });
+
+        // console.log("Sesión creada:", {
+        //   online: req.session.online,
+        //   email: req.session.email,
+        //   cookie: req.session.cookie,
+        //   token: token, // Agregamos el token al log
+        // });
+        console.log("token:", req.token);
         return done(null, user);
       } catch (error) {
         console.error("Error durante el proceso de autenticación:", error);
@@ -146,7 +143,6 @@ passport.use(
     async (req, accessToken, refreshToken, profile, done) => {
       try {
         //desestruturamiento de google usuario y foto
-        console.log("///////////////////////");
         console.log("//////GOOGLE");
         console.log(profile);
         console.log("GOOGLE/////");
@@ -177,45 +173,109 @@ passport.use(
 //--SINGOUT
 passport.use(
   "signout",
-  new JwtStrategy(
+  new LocalStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
-      secretOrKey: process.env.SECRET_KEY,
+      passReqToCallback: true,
     },
-    async (data, done) => {
+    async (req, done) => {
       try {
-        const { user_id } = data;
-        await update(user_id, { isOnline: false });
-        // construiria un token que venza al instante
-        return done(null, { user_id: null });
+        const token = req.token;
+        if (!token) {
+          const error = new Error("USER NOT LOGGED");
+          error.statusCode = 401;
+          return done(error);
+        }
+        delete req.token;
+        return done(null, null);
       } catch (error) {
         return done(error);
       }
     }
   )
 );
+
+//--ONLINE
+// passport.use(
+//   "online",
+//   new JwtStrategy(
+//     {
+//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+//       secretOrKey: process.env.SECRET_KEY,
+//     },
+//     async (data, done) => {
+//       try {
+//         const { user_id } = data;
+//         const user = await readById(user_id);
+//         const { isOnline } = user;
+//         if (!isOnline) {
+//           const info = { message: "USER IS NOT ONLINE", statusCode: 401 };
+//           return done(null, false, info);
+//         }
+//         return done(null, user);
+//       } catch (error) {
+//         return done(error);
+//       }
+//     }
+//   )
+// );
+
 //--ONLINE
 passport.use(
   "online",
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.SECRET_KEY,
     },
     async (data, done) => {
       try {
+        console.log("JWT payload:", data); // Debug
+
         const { user_id } = data;
         const user = await readById(user_id);
+        console.log(user);
+        if (!user) {
+          const info = { message: "USER NOT FOUND", statusCode: 404 };
+          return done(null, false, info);
+        }
+
         const { isOnline } = user;
         if (!isOnline) {
-          // const error = new Error("USER IS NOT ONLINE");
-          // error.statusCode = 401;
-          // return done(error);
           const info = { message: "USER IS NOT ONLINE", statusCode: 401 };
           return done(null, false, info);
         }
+
         return done(null, user);
       } catch (error) {
+        console.error("Error in JWT strategy:", error);
+        return done(error);
+      }
+    }
+  )
+);
+
+passport.use(
+  "onlineLocalStrategy",
+  new LocalStrategy(
+    {
+      passReqToCallback: true,
+      usernameField: "email",
+      passwordField: "pasword",
+    },
+    async (req, email, password, done) => {
+      try {
+        const token = req.token;
+        const { user_id } = verifyTokenUtil(token);
+        const user = await readById(user_id);
+        const { isOnline } = user;
+        if (!isOnline) {
+          const error = new Error("user is not online");
+          error.statusCode = 401;
+          return done(error);
+        }
+        console.log(user);
+        return done(null, user);
+      } catch {
         return done(error);
       }
     }

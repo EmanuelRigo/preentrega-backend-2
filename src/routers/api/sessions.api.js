@@ -1,12 +1,7 @@
-import { response, Router } from "express";
-import { readByEmail } from "../../data/mongo/managers/users.manager.js";
-import isValidUser from "../../middlewares/isValidUser.mid.js";
-import isValidUserData from "../../middlewares/isValidUserData.mid.js";
-import isUser from "../../middlewares/isUser.mid.js";
+import { Router } from "express";
 import passport from "../../middlewares/passport.mid.js";
 import { readById } from "../../data/mongo/managers/users.manager.js";
-import createHash from "../../middlewares/createHash.mid.js";
-import verifyHash from "../../middlewares/verifyHash.mid.js";
+import { verifyTokenUtil } from "../../utils/token.util.js";
 
 const sessionsRouter = Router();
 
@@ -27,19 +22,22 @@ sessionsRouter.post(
 //SINGOUT
 sessionsRouter.post(
   "/signout",
-  // passport.authenticate("signout", { session: false }),
+  passport.authenticate("signout", { session: false }),
   signout2
 );
+
 //ONLINE
-sessionsRouter.post("/online", online2);
+sessionsRouter.post(
+  "/online",
+  passport.authenticate("online", { session: false }),
+  onlineToken
+);
 
 // GOOGLE
 sessionsRouter.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
-
-// /api/session/google/cb va a llamar efectivamente a la estrategia
 
 sessionsRouter.get(
   "/google/cb",
@@ -104,10 +102,15 @@ async function online(req, res, next) {
   }
 }
 
-function online2(req, res, next) {
+async function online2(req, res, next) {
   try {
+    const { user_id } = req.session;
+    const one = await readById(user_id);
     if (req.session.user_id) {
-      return res.status(200).json({ message: "USER IS ONLINE", online: true });
+      return res.status(200).json({
+        message: one.email.toUpperCase() + " is online",
+        online: true,
+      });
     } else {
       return res
         .status(400)
@@ -120,13 +123,52 @@ function online2(req, res, next) {
 
 async function onlineToken(req, res, next) {
   try {
-    console.log("req.user:", req.user);
+    // Obtener el token del header de Authorization
+    const authHeader = req.headers.authorization;
+    console.log("Authorization header:", authHeader);
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        message: "No token provided or invalid format",
+        online: false,
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    console.log("Token extraído:", token);
+
+    if (!token) {
+      return res.status(401).json({
+        message: "No token provided",
+        online: false,
+      });
+    }
+
+    const data = verifyTokenUtil(token);
+    console.log("Data del token:", data);
+
+    const user = await readById(data.user_id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        online: false,
+      });
+    }
+
     return res.status(200).json({
-      message: req.user.email.toUpperCase() + "IS ONLINE",
+      message: user.email.toUpperCase() + " IS ONLINE",
       online: true,
+      user: {
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
-    return next(error);
+    console.error("Error en onlineToken:", error);
+    return res.status(401).json({
+      message: "Invalid or expired token",
+      online: false,
+    });
   }
 }
 

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 const { SECRET_KEY } = process.env;
 
 function createTokenUtil(data) {
-  const token = jwt.sign(data, SECRET_KEY, { expiresIn: 60 * 60 * 24 * 7 });
+  const token = jwt.sign(data, SECRET_KEY, { expiresIn: 60 * 60 * 24 });
   return token;
 }
 
