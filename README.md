@@ -198,4 +198,109 @@ En esta clase, implementaremos la estrategia de autenticación utilizando Google
 
 ### Conclusión
 
-La integración de Google mejora la seguridad y la experiencia del usuario en tu aplicación, facilitando el acceso utilizando cuentas de Google.
+# Sistema de Autenticación y Autorización
+
+## Características Principales
+
+### 1. Autenticación Local
+
+- Registro de usuarios con email y contraseña
+- Login seguro con validación de credenciales
+- Manejo de sesiones con JWT (JSON Web Tokens)
+- Verificación de estado online/offline de usuarios
+
+### 2. Integración con Google OAuth2
+
+- Login con cuentas de Google
+- Registro automático de nuevos usuarios
+- Acceso seguro mediante OAuth 2.0
+- Obtención de perfil básico del usuario
+
+### 3. Gestión de Sesiones
+
+- Manejo de tokens JWT para autenticación
+- Verificación de estado de sesión
+- Cierre de sesión seguro
+- Control de acceso a rutas protegidas
+
+### 4. Seguridad
+
+- Encriptación de contraseñas
+- Protección contra ataques CSRF
+- Validación de tokens
+- Manejo seguro de sesiones
+
+## Endpoints
+
+### Autenticación Local
+
+- `POST /api/sessions/register` - Registro de nuevos usuarios
+- `POST /api/sessions/login` - Inicio de sesión
+- `POST /api/sessions/signout` - Cierre de sesión
+- `POST /api/sessions/online` - Verificación de estado online
+
+### Google OAuth
+
+- `GET /api/sessions/google` - Inicio de autenticación con Google
+- `GET /api/sessions/google/cb` - Callback de autenticación Google
+
+## Uso
+
+1. **Registro Local**
+
+```javascript
+fetch("/api/sessions/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+});
+```
+
+2. **Login Local**
+
+```javascript
+fetch("/api/sessions/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+});
+```
+
+3. **Verificación de Estado Online**
+
+```javascript
+fetch("/api/sessions/online", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
+});
+```
+
+## Tecnologías Utilizadas
+
+- Node.js
+- Express
+- Passport.js
+- JWT
+- Google OAuth 2.0
+- MongoDB
+
+## Configuración
+
+1. Instalar dependencias:
+
+```bash
+npm install
+```
+
+2. Configurar variables de entorno:
+
+```env
+PORT=9000
+MONGODB_URI=your_mongodb_uri
+SECRET_KEY=your_jwt_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
