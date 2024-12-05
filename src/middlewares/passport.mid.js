@@ -114,16 +114,17 @@ passport.use(
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.SECRET_KEY,
     },
-    (data, done) => {
+    async (data, done) => {
       try {
-        console.log(data);
+        console.log("data desde passport admin:", data);
         const { user_id, role } = data;
         if (role !== "ADMIN") {
           const error = new Error("NOT AUTHORIZED");
           error.statusCode = 403;
           return done(error);
         }
-        return done(null, { user_id });
+        const user = await readById(user_id);
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
@@ -173,20 +174,16 @@ passport.use(
 //--SINGOUT
 passport.use(
   "signout",
-  new LocalStrategy(
+  new JwtStrategy(
     {
-      passReqToCallback: true,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.SECRET_KEY,
     },
-    async (req, done) => {
+    async (data, done) => {
       try {
-        const token = req.token;
-        if (!token) {
-          const error = new Error("USER NOT LOGGED");
-          error.statusCode = 401;
-          return done(error);
-        }
-        delete req.token;
-        return done(null, null);
+        const { user_id } = data;
+        await update(user_id, { isOnline: false });
+        return done(null, { user_id: null });
       } catch (error) {
         return done(error);
       }
@@ -253,7 +250,7 @@ passport.use(
     }
   )
 );
-
+//--ONLINE LOCALSTRATEGY (NO LO UTILIZO)
 passport.use(
   "onlineLocalStrategy",
   new LocalStrategy(

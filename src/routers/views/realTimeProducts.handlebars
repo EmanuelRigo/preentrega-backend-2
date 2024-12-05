@@ -80,6 +80,7 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
+    const token = localStorage.getItem("token");
     let data = [];
     const ulList = document.getElementById('ulList');
 
@@ -160,7 +161,11 @@
     // Función para eliminar producto
     async function deleteProduct(productId) {
         try {
-            const response = await fetch(`/api/products/${productId}`, { method: 'DELETE' });
+            const response = await fetch(`/api/products/${productId}`, {
+                method: 'DELETE', headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+            });
             if (response.ok) {
                 console.log('Producto eliminado:', productId);
                 let updated = await fetchProducts();
@@ -187,11 +192,14 @@
         productData.stock = parseInt(productData.stock);
         productData.thumbnails = productData.thumbnails ? productData.thumbnails.split(',').map(url => url.trim()) : [];
 
+
         try {
             const response = await fetch('/api/products', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+
                 },
                 body: JSON.stringify(productData),
             });

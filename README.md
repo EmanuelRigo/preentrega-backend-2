@@ -304,3 +304,17 @@ SECRET_KEY=your_jwt_secret
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
+
+### Uso de Postman para Crear un Producto
+
+Al utilizar Postman para crear un producto, asegúrate de incluir el token de autenticación en el header `Authorization`. El formato correcto es:
+
+```
+Authorization: Bearer <tu_token>
+```
+
+Reemplaza `<tu_token>` con el token JWT que obtuviste al iniciar sesión. Esto asegura que la solicitud esté autenticada correctamente.
+
+### Implementación de Sign Out
+
+Se ha añadido la funcionalidad de cierre de sesión (sign out) utilizando Passport y Handlebars. Esto permite a los usuarios cerrar sesión de manera segura desde la interfaz de usuario.

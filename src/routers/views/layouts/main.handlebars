@@ -141,7 +141,7 @@
 
                             if (signoutResponse.ok) {
                                 localStorage.removeItem("token");
-                                window.location.replace('/');
+                                window.location.replace('/products');
                             }
                         } catch (error) {
                             console.error("Error en el proceso de cierre de sesión:", error);

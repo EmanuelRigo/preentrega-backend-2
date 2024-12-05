@@ -24,7 +24,7 @@ productsApiRouter.post(
       const data = req.body;
       const response = await create(data);
       return res.status(201).json({ response, message });
-    } catch {
+    } catch (error) {
       return next(error);
     }
   }

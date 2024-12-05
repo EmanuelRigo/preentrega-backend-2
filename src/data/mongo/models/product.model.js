@@ -10,8 +10,8 @@ const schema = new Schema({
   status: { type: String, required: true },
   category: {
     type: String,
-    enum: ["celulares", "tablets", "computadoras"],
-    default: "computadoras",
+    enum: ["smartphones", "laptops", "tablets", "accesorios"],
+    default: "smartphones",
   },
 });
 

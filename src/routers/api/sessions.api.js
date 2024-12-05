@@ -123,6 +123,17 @@ async function online2(req, res, next) {
 
 async function onlineToken(req, res, next) {
   try {
+    return res.status(200).json({
+      message: req.user.email.toUpperCase() + "IS ONLINE",
+      online: true,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function onlineToken2(req, res, next) {
+  try {
     // Obtener el token del header de Authorization
     const authHeader = req.headers.authorization;
     console.log("Authorization header:", authHeader);
