@@ -2,46 +2,42 @@ import { Router } from "express";
 import passport from "../../middlewares/passport.mid.js";
 import { readById } from "../../data/mongo/managers/users.manager.js";
 import { verifyTokenUtil } from "../../utils/token.util.js";
-
+import passportCb from "../../middlewares/passportCb.mid.js";
 const sessionsRouter = Router();
 
 //REGISTER
 sessionsRouter.post(
   "/register",
-  passport.authenticate("register", { session: false }),
+  passportCb("register", { session: false }),
   register
 );
 
 //LOGIN
-sessionsRouter.post(
-  "/login",
-  passport.authenticate("login", { session: false }),
-  login
-);
+sessionsRouter.post("/login", passportCb("login", { session: false }), login);
 
 //SINGOUT
 sessionsRouter.post(
   "/signout",
-  passport.authenticate("signout", { session: false }),
+  passportCb("signout", { session: false }),
   signout2
 );
 
 //ONLINE
 sessionsRouter.post(
   "/online",
-  passport.authenticate("online", { session: false }),
+  passportCb("online", { session: false }),
   onlineToken
 );
 
 // GOOGLE
 sessionsRouter.get(
   "/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passportCb("google", { scope: ["email", "profile"] })
 );
 
 sessionsRouter.get(
   "/google/cb",
-  passport.authenticate("google", { session: false }),
+  passportCb("google", { session: false }),
   google
 );
 
@@ -56,11 +52,24 @@ async function register(req, res, next) {
   }
 }
 
+// async function login(req, res, next) {
+//   try {
+//     return res
+//       .status(200)
+//       .json({ message: "USER LOGGED IN", token: req.token });
+//   } catch (error) {
+//     return next(error);
+//   }
+// }
+
 async function login(req, res, next) {
   try {
-    return res
-      .status(200)
-      .json({ message: "USER LOGGED IN", token: req.token });
+    const token = req.token;
+    const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, httpOnly: true };
+    return res.status(200).cookie("token", token, opts).json({
+      status: "success",
+      message: "USER LOGGED IN",
+    });
   } catch (error) {
     return next(error);
   }
@@ -75,7 +84,10 @@ function signout(req, res, next) {
 function signout2(req, res, next) {
   try {
     req.session.destroy();
-    return res.status(200).json({ message: "USER SIGNED OUT" });
+    return res
+      .status(200)
+      .clearCookie("token")
+      .json({ message: "USER SIGNED OUT" });
   } catch (error) {
     return next(error);
   }

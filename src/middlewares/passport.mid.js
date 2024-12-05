@@ -26,9 +26,11 @@ passport.use(
       try {
         const userExists = await readByEmail(email);
         if (userExists) {
-          const error = new Error("User already exists");
-          error.statusCode = 400;
-          return done(error);
+          const info = {
+            message: "User already exists",
+            statusCode: 400,
+          };
+          return done(null, false, info);
         }
         req.body.password = createHashUtil(password);
         const data = req.body;
@@ -51,52 +53,39 @@ passport.use(
     async (req, email, password, done) => {
       try {
         if (!email || !password) {
-          const error = new Error("EMAIL AND PASSWORD ARE REQUIRED");
-          error.statusCode = 400;
-          return done(error);
+          const info = {
+            message: "EMAIL AND PASSWORD ARE REQUIRED",
+            statusCode: 400,
+          };
+          return done(null, false, info);
         }
 
         const user = await readByEmail(email);
         if (!user) {
-          const error = new Error("INVALID CREDENTIALS");
-          error.statusCode = 401;
-          return done(error);
+          const info = {
+            message: "INVALID CREDENTIALS",
+            statusCode: 401,
+          };
+          return done(null, false, info);
         }
 
         const verify = verifyHashUtil(password, user.password);
         if (!verify) {
-          const error = new Error("INVALID CREDENTIALS");
-          error.statusCode = 401;
-          return done(error);
+          const info = {
+            message: "INVALID CREDENTIALS",
+            statusCode: 401,
+          };
+          return done(null, false, info);
         }
-        await update(user._id, { isOnline: true });
 
+        await update(user._id, { isOnline: true });
         const data = {
           user_id: user._id,
           role: user.role,
           isOnline: true,
         };
-
         const token = createTokenUtil(data);
         req.token = token;
-
-        // // Configurar la cookie
-
-        // req.session.cookie = {
-        //   originalMaxAge: null,
-        //   expires: null,
-        //   httpOnly: true,
-        //   path: "/",
-        // };
-
-        // await update(user._id, { isOnline: true });
-
-        // console.log("Sesión creada:", {
-        //   online: req.session.online,
-        //   email: req.session.email,
-        //   cookie: req.session.cookie,
-        //   token: token, // Agregamos el token al log
-        // });
         console.log("token:", req.token);
         return done(null, user);
       } catch (error) {
@@ -111,7 +100,7 @@ passport.use(
   "admin",
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
       secretOrKey: process.env.SECRET_KEY,
     },
     async (data, done) => {
@@ -119,9 +108,11 @@ passport.use(
         console.log("data desde passport admin:", data);
         const { user_id, role } = data;
         if (role !== "ADMIN") {
-          const error = new Error("NOT AUTHORIZED");
-          error.statusCode = 403;
-          return done(error);
+          const info = {
+            message: "NOT AUTHORIZED",
+            statusCode: 403,
+          };
+          return done(null, false, info);
         }
         const user = await readById(user_id);
         return done(null, user);
@@ -143,15 +134,8 @@ passport.use(
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        //desestruturamiento de google usuario y foto
-        console.log("//////GOOGLE");
-        console.log(profile);
-        console.log("GOOGLE/////");
         const { id, picture } = profile;
-        //como estrategia de terceros no se suele registrar al usuario por su email
         let user = await readByEmail(id);
-        //loguea si existe
-        //sino, registra e inicia sesion
         if (!user) {
           user = await create({
             email: id,
@@ -161,9 +145,6 @@ passport.use(
         }
         req.token = createTokenUtil({ role: user.role, user: user._id });
         console.log("token:", token);
-        // LOS DATOS DE LA SESSION SE DEBEN GUARDAR EN UN TOKEN
-        // req.session.role = user.role;
-        // req.session.user_id = user._id;
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -171,81 +152,70 @@ passport.use(
     }
   )
 );
-//--SINGOUT
+//--SIGNOUT
 passport.use(
   "signout",
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
       secretOrKey: process.env.SECRET_KEY,
     },
     async (data, done) => {
       try {
+        console.log("Signout data:", data);
         const { user_id } = data;
         await update(user_id, { isOnline: false });
         return done(null, { user_id: null });
       } catch (error) {
-        return done(error);
+        const info = {
+          message: "Error in signout process",
+          statusCode: 500,
+        };
+        return done(null, false, info);
       }
     }
   )
 );
-
-//--ONLINE
-// passport.use(
-//   "online",
-//   new JwtStrategy(
-//     {
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: process.env.SECRET_KEY,
-//     },
-//     async (data, done) => {
-//       try {
-//         const { user_id } = data;
-//         const user = await readById(user_id);
-//         const { isOnline } = user;
-//         if (!isOnline) {
-//           const info = { message: "USER IS NOT ONLINE", statusCode: 401 };
-//           return done(null, false, info);
-//         }
-//         return done(null, user);
-//       } catch (error) {
-//         return done(error);
-//       }
-//     }
-//   )
-// );
 
 //--ONLINE
 passport.use(
   "online",
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
       secretOrKey: process.env.SECRET_KEY,
     },
     async (data, done) => {
       try {
-        console.log("JWT payload:", data); // Debug
-
+        console.log("JWT payload:", data);
         const { user_id } = data;
         const user = await readById(user_id);
-        console.log(user);
+        console.log("Usuario encontrado:", user);
+
         if (!user) {
-          const info = { message: "USER NOT FOUND", statusCode: 404 };
+          const info = {
+            message: "USER NOT FOUND",
+            statusCode: 404,
+          };
           return done(null, false, info);
         }
 
         const { isOnline } = user;
         if (!isOnline) {
-          const info = { message: "USER IS NOT ONLINE", statusCode: 401 };
+          const info = {
+            message: "USER IS NOT ONLINE",
+            statusCode: 401,
+          };
           return done(null, false, info);
         }
 
         return done(null, user);
       } catch (error) {
-        console.error("Error in JWT strategy:", error);
-        return done(error);
+        const info = {
+          message: "Error in JWT strategy",
+          statusCode: 500,
+        };
+        return done(null, false, info);
       }
     }
   )
@@ -266,14 +236,20 @@ passport.use(
         const user = await readById(user_id);
         const { isOnline } = user;
         if (!isOnline) {
-          const error = new Error("user is not online");
-          error.statusCode = 401;
-          return done(error);
+          const info = {
+            message: "User is not online",
+            statusCode: 401,
+          };
+          return done(null, false, info);
         }
         console.log(user);
         return done(null, user);
-      } catch {
-        return done(error);
+      } catch (error) {
+        const info = {
+          message: "Error in online verification",
+          statusCode: 500,
+        };
+        return done(null, false, info);
       }
     }
   )

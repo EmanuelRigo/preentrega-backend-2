@@ -49,7 +49,7 @@
             const result = await response.json();
 
             if (result.message === 'USER LOGGED IN') {
-                localStorage.setItem("token", result.token);
+
                 window.location.replace('/products');
             } else {
                 alert('INVALID CREDENTIALS');
