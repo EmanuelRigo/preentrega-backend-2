@@ -9,20 +9,31 @@ const collection = process.env.CART_COLLECTION;
 
 const schema = new mongoose.Schema(
   {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     products: [
       {
-        _id: {
+        product_id: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: process.env.PRODUCTS_COLLECTION, // Asegúrate de que este sea el nombre correcto del modelo de producto
+          ref: process.env.PRODUCTS_COLLECTION,
           required: true,
         },
         quantity: {
           type: Number,
           required: true,
+          min: 1,
           default: 1,
         },
       },
     ],
+    state: {
+      type: String,
+      enum: ["reserved", "paid", "delivered"],
+      default: "reserved",
+    },
   },
   { timestamps: true }
 );

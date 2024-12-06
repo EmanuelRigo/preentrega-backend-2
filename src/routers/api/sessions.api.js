@@ -1,78 +1,60 @@
-import { Router } from "express";
+import CustomRouter from "../../utils/CustomRouter.util.js";
 import passport from "../../middlewares/passport.mid.js";
 import { readById } from "../../data/mongo/managers/users.manager.js";
 import { verifyTokenUtil } from "../../utils/token.util.js";
 import passportCb from "../../middlewares/passportCb.mid.js";
-const sessionsRouter = Router();
 
-//REGISTER
-sessionsRouter.post(
-  "/register",
-  passportCb("register", { session: false }),
-  register
-);
-
-//LOGIN
-sessionsRouter.post("/login", passportCb("login", { session: false }), login);
-
-//SINGOUT
-sessionsRouter.post(
-  "/signout",
-  passportCb("signout", { session: false }),
-  signout2
-);
-
-//ONLINE
-sessionsRouter.post(
-  "/online",
-  passportCb("online", { session: false }),
-  onlineToken
-);
-
-// GOOGLE
-sessionsRouter.get(
-  "/google",
-  passportCb("google", { scope: ["email", "profile"] })
-);
-
-sessionsRouter.get(
-  "/google/cb",
-  passportCb("google", { session: false }),
-  google
-);
-
-async function register(req, res, next) {
-  try {
-    const user = req.user;
-    return res
-      .status(201)
-      .json({ message: "USER REGISTERED", user, user_id: user._id });
-  } catch (error) {
-    return next(error);
+class SessionApiRouter extends CustomRouter {
+  constructor() {
+    super();
+    this.init();
   }
+  init = () => {
+    //REGISTER
+    this.create(
+      "/register",
+      passportCb("register", { session: false }),
+      register
+    );
+
+    //LOGIN
+    this.create("/login", passportCb("login", { session: false }), login);
+
+    //SINGOUT
+    this.create(
+      "/signout",
+      passportCb("signout", { session: false }),
+      signout2
+    );
+
+    //ONLINE
+    this.create(
+      "/online",
+      passportCb("online", { session: false }),
+      onlineToken
+    );
+
+    // GOOGLE
+    this.read("/google", passportCb("google", { scope: ["email", "profile"] }));
+
+    this.read("/google/cb", passportCb("google", { session: false }), google);
+  };
 }
 
-// async function login(req, res, next) {
-//   try {
-//     return res
-//       .status(200)
-//       .json({ message: "USER LOGGED IN", token: req.token });
-//   } catch (error) {
-//     return next(error);
-//   }
-// }
+async function register(req, res, next) {
+  const user = req.user;
+  return res
+    .status(201)
+    .json({ message: "USER REGISTERED", user, user_id: user._id });
+}
 
 async function login(req, res, next) {
-  try {
-    const token = req.token;
-    const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, httpOnly: true };
-    return res.status(200).cookie("token", token, opts).json({
-      status: "success",
-      message: "USER LOGGED IN",
-    });
-  } catch (error) {
-    return next(error);
-  }
+  const token = req.token;
+  const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, httpOnly: true };
+  return res.status(200).cookie("token", token, opts).json({
+    status: "success",
+    message: "USER LOGGED IN",
+  });
 }
 
 function signout(req, res, next) {
@@ -82,127 +64,98 @@ function signout(req, res, next) {
 }
 
 function signout2(req, res, next) {
-  try {
-    req.session.destroy();
-    return res
-      .status(200)
-      .clearCookie("token")
-      .json({ message: "USER SIGNED OUT" });
-  } catch (error) {
-    return next(error);
-  }
+  req.session.destroy();
+  return res
+    .status(200)
+    .clearCookie("token")
+    .json({ message: "USER SIGNED OUT" });
 }
 
 async function online(req, res, next) {
-  try {
-    const { token } = req.headers;
-    console.log(req.headers);
-    const data = verifyTokenUtil(token);
-    const one = await readById(data.user_id);
-    if (one) {
-      return res.status(200).json({
-        message: one.email.toUpperCase() + " IS ONLINE",
-        online: true,
-      });
-    } else {
-      return res
-        .status(400)
-        .json({ message: "USER IS NOT ONLINE", online: false });
-    }
-  } catch (error) {
-    return next(error);
+  const { token } = req.headers;
+  console.log(req.headers);
+  const data = verifyTokenUtil(token);
+  const one = await readById(data.user_id);
+  if (one) {
+    return res.status(200).json({
+      message: one.email.toUpperCase() + " IS ONLINE",
+      online: true,
+    });
+  } else {
+    return res
+      .status(400)
+      .json({ message: "USER IS NOT ONLINE", online: false });
   }
 }
 
 async function online2(req, res, next) {
-  try {
-    const { user_id } = req.session;
-    const one = await readById(user_id);
-    if (req.session.user_id) {
-      return res.status(200).json({
-        message: one.email.toUpperCase() + " is online",
-        online: true,
-      });
-    } else {
-      return res
-        .status(400)
-        .json({ message: "USER IS NOT ONLINE", online: false });
-    }
-  } catch (error) {
-    return next(error);
+  const { user_id } = req.session;
+  const one = await readById(user_id);
+  if (req.session.user_id) {
+    return res.status(200).json({
+      message: one.email.toUpperCase() + " is online",
+      online: true,
+    });
+  } else {
+    return res
+      .status(400)
+      .json({ message: "USER IS NOT ONLINE", online: false });
   }
 }
 
 async function onlineToken(req, res, next) {
-  try {
-    return res.status(200).json({
-      message: req.user.email.toUpperCase() + "IS ONLINE",
-      online: true,
-    });
-  } catch (error) {
-    return next(error);
-  }
+  return res.status(200).json({
+    message: req.user.email.toUpperCase() + "IS ONLINE",
+    online: true,
+  });
 }
 
 async function onlineToken2(req, res, next) {
-  try {
-    // Obtener el token del header de Authorization
-    const authHeader = req.headers.authorization;
-    console.log("Authorization header:", authHeader);
+  // Obtener el token del header de Authorization
+  const authHeader = req.headers.authorization;
+  console.log("Authorization header:", authHeader);
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        message: "No token provided or invalid format",
-        online: false,
-      });
-    }
-
-    const token = authHeader.split(" ")[1];
-    console.log("Token extraído:", token);
-
-    if (!token) {
-      return res.status(401).json({
-        message: "No token provided",
-        online: false,
-      });
-    }
-
-    const data = verifyTokenUtil(token);
-    console.log("Data del token:", data);
-
-    const user = await readById(data.user_id);
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-        online: false,
-      });
-    }
-
-    return res.status(200).json({
-      message: user.email.toUpperCase() + " IS ONLINE",
-      online: true,
-      user: {
-        email: user.email,
-        role: user.role,
-      },
-    });
-  } catch (error) {
-    console.error("Error en onlineToken:", error);
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({
-      message: "Invalid or expired token",
+      message: "No token provided or invalid format",
       online: false,
     });
   }
+
+  const token = authHeader.split(" ")[1];
+  console.log("Token extraído:", token);
+
+  if (!token) {
+    return res.status(401).json({
+      message: "No token provided",
+      online: false,
+    });
+  }
+
+  const data = verifyTokenUtil(token);
+  console.log("Data del token:", data);
+
+  const user = await readById(data.user_id);
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+      online: false,
+    });
+  }
+
+  return res.status(200).json({
+    message: user.email.toUpperCase() + " IS ONLINE",
+    online: true,
+    user: {
+      email: user.email,
+      role: user.role,
+    },
+  });
 }
 
 async function google(req, res, next) {
-  try {
-    return res
-      .status(200)
-      .json({ message: "USER LOGGED IN", token: req.token });
-  } catch (error) {
-    return next(error);
-  }
+  return res.status(200).json({ message: "USER LOGGED IN", token: req.token });
 }
 
-export default sessionsRouter;
+const sessionsApiRouter = new SessionApiRouter();
+export default sessionsApiRouter.getRouter();
