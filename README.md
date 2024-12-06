@@ -318,3 +318,25 @@ Reemplaza `<tu_token>` con el token JWT que obtuviste al iniciar sesión. Esto a
 ### Implementación de Sign Out
 
 Se ha añadido la funcionalidad de cierre de sesión (sign out) utilizando Passport y Handlebars. Esto permite a los usuarios cerrar sesión de manera segura desde la interfaz de usuario.
+
+### Implementación de Custom Routers
+
+Se han implementado **Custom Routers** para organizar mejor las rutas de la aplicación. Esto mejora la modularidad y el mantenimiento del código.
+
+#### Ejemplo de Uso:
+
+```javascript
+import express from "express";
+const customRouter = express.Router();
+
+customRouter.get("/example", (req, res) => {
+  res.send("Example route");
+});
+
+export default customRouter;
+```
+
+```javascript
+import customRouter from "./path/to/customRouter";
+app.use("/api", customRouter);
+```

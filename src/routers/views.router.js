@@ -16,11 +16,9 @@ router.get("/products", async (req, res) => {
     if (queryParams.toString()) {
       url += `?${queryParams.toString()}`;
     }
-    console.log("url://////////", url);
     const response = await fetch(url);
     const products = await response.json();
-    console.log("products:", products);
-    res.render("home", { products: products.data });
+    res.render("home", { products: products.response });
   } catch (error) {
     console.error("Error al obtener productos:", error);
     res

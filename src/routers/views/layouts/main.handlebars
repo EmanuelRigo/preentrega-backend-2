@@ -110,7 +110,7 @@
                 const response = await fetch(url, opts);
                 const result = await response.json();
 
-                if (result.online) {
+                if (result.response) {
                     authButtons.innerHTML = `
                         <button id="signout" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
                             Sign Out

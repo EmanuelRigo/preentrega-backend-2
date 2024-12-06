@@ -89,12 +89,12 @@
         try {
             const response = await fetch('/api/products/all');
             const result = await response.json();
-            console.log(result)
+            console.log("result:", result)
 
-            if (Array.isArray(result.data.docs)) {
-                data = result.data.docs.reverse();
-            } else if (result.data && Array.isArray(result.data)) {
-                data = result.data.reverse();
+            if (Array.isArray(result.response)) {
+                data = result.response.reverse();
+            } else if (result.response && Array.isArray(result.response)) {
+                data = result.response.reverse();
             } else {
                 console.error('Los datos recibidos no son un array:', result);
                 data = [];

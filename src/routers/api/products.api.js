@@ -25,7 +25,7 @@ class ProductsApiRouter extends CustomRouter {
         const message = "PRODUCT CREATED";
         const data = req.body;
         const response = await create(data);
-        return res.status(201).json({ response, message });
+        return res.json201(response, message);
       }
     );
 
@@ -69,14 +69,23 @@ class ProductsApiRouter extends CustomRouter {
         filter: filter,
       };
 
-      const data = await getFiltered(options);
-
-      res.status(200).send({ error: null, data });
+      const response = await getFiltered(options);
+      const message = "PRODUCTS UPDATED";
+      if (response.docs.length > 0) {
+        return res.json201(response, message);
+      } else {
+        return res.json404();
+      }
     });
 
     this.read("/all", async (req, res) => {
-      const data = await getAll();
-      res.status(200).send({ error: null, data });
+      const response = await getAll();
+      const message = "PRODUCTS UPDATED";
+      if (response.length > 0) {
+        return res.json201(response, message);
+      } else {
+        return res.json404();
+      }
     });
 
     this.update(
@@ -88,7 +97,11 @@ class ProductsApiRouter extends CustomRouter {
         const message = "PRODUCT UPDATED";
         const response = await update(id, data);
 
-        return res.status(200).json({ response, message });
+        if (response) {
+          return res.json201(response, message);
+        } else {
+          return res.json404();
+        }
       }
     );
 
@@ -102,7 +115,11 @@ class ProductsApiRouter extends CustomRouter {
 
         const response = await destroy(id);
 
-        return res.status(200).json({ response, message });
+        if (response) {
+          return res.json201(response, message);
+        } else {
+          return res.json404();
+        }
       }
     );
   };

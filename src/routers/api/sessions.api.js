@@ -3,6 +3,7 @@ import passport from "../../middlewares/passport.mid.js";
 import { readById } from "../../data/mongo/managers/users.manager.js";
 import { verifyTokenUtil } from "../../utils/token.util.js";
 import passportCb from "../../middlewares/passportCb.mid.js";
+import { response } from "express";
 
 class SessionApiRouter extends CustomRouter {
   constructor() {
@@ -21,11 +22,7 @@ class SessionApiRouter extends CustomRouter {
     this.create("/login", passportCb("login", { session: false }), login);
 
     //SINGOUT
-    this.create(
-      "/signout",
-      passportCb("signout", { session: false }),
-      signout2
-    );
+    this.create("/signout", passportCb("signout", { session: false }), signout);
 
     //ONLINE
     this.create(
@@ -42,33 +39,27 @@ class SessionApiRouter extends CustomRouter {
 }
 
 async function register(req, res, next) {
-  const user = req.user;
-  return res
-    .status(201)
-    .json({ message: "USER REGISTERED", user, user_id: user._id });
+  const { _id } = req.user;
+  const message = "User Registered";
+  return res.json201(_id, message);
+  // return res
+  //   .status(201)
+  //   .json({ message: "USER REGISTERED", user, user_id: user._id });
 }
 
 async function login(req, res, next) {
   const token = req.token;
   const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, httpOnly: true };
-  return res.status(200).cookie("token", token, opts).json({
-    status: "success",
-    message: "USER LOGGED IN",
-  });
+  const message = "USER LOGGED IN";
+  const response = "ok";
+  return res.cookie("token", token, opts).json200(response, message);
 }
 
 function signout(req, res, next) {
-  const message = "User signed out!";
+  // req.session.destroy();
   const response = "OK";
+  const message = "SIGN OUT";
   return res.clearCookie("token").json200(response, message);
-}
-
-function signout2(req, res, next) {
-  req.session.destroy();
-  return res
-    .status(200)
-    .clearCookie("token")
-    .json({ message: "USER SIGNED OUT" });
 }
 
 async function online(req, res, next) {
@@ -88,26 +79,10 @@ async function online(req, res, next) {
   }
 }
 
-async function online2(req, res, next) {
-  const { user_id } = req.session;
-  const one = await readById(user_id);
-  if (req.session.user_id) {
-    return res.status(200).json({
-      message: one.email.toUpperCase() + " is online",
-      online: true,
-    });
-  } else {
-    return res
-      .status(400)
-      .json({ message: "USER IS NOT ONLINE", online: false });
-  }
-}
-
 async function onlineToken(req, res, next) {
-  return res.status(200).json({
-    message: req.user.email.toUpperCase() + "IS ONLINE",
-    online: true,
-  });
+  const message = req.user.email.toUpperCase() + "IS ONLINE";
+  const response = true;
+  return res.json200(response, message);
 }
 
 async function onlineToken2(req, res, next) {
