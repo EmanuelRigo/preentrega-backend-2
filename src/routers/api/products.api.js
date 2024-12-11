@@ -11,6 +11,7 @@ import {
 } from "../../data/mongo/managers/product.manager.js";
 //import ProductController from "../../dao/product.controller.js";
 import passport from "../../middlewares/passport.mid.js";
+import { createProductController } from "../../controller/products.controllers.js";
 
 class ProductsApiRouter extends CustomRouter {
   constructor() {
@@ -20,16 +21,12 @@ class ProductsApiRouter extends CustomRouter {
   init = () => {
     this.create(
       "/",
+      ["PUBLIC"],
       passport.authenticate("admin", { session: false }),
-      async (req, res, next) => {
-        const message = "PRODUCT CREATED";
-        const data = req.body;
-        const response = await create(data);
-        return res.json201(response, message);
-      }
+      createProductController
     );
 
-    this.read("/", async (req, res) => {
+    this.read("/", ["PUBLIC"], async (req, res) => {
       const { limit = 10, page = 1, sort, query, available } = req.query;
 
       const limitNumber = parseInt(limit, 10);
@@ -70,6 +67,7 @@ class ProductsApiRouter extends CustomRouter {
       };
 
       const response = await getFiltered(options);
+      console.log(response);
       const message = "PRODUCTS UPDATED";
       if (response.docs.length > 0) {
         return res.json201(response, message);
@@ -78,7 +76,7 @@ class ProductsApiRouter extends CustomRouter {
       }
     });
 
-    this.read("/all", async (req, res) => {
+    this.read("/all", ["PUBLIC"], async (req, res) => {
       const response = await getAll();
       const message = "PRODUCTS UPDATED";
       if (response.length > 0) {
@@ -90,6 +88,7 @@ class ProductsApiRouter extends CustomRouter {
 
     this.update(
       "/:id",
+      ["ADMIN"],
       passport.authenticate("admin", { session: false }),
       async (req, res, next) => {
         const { id } = req.params;
@@ -107,6 +106,7 @@ class ProductsApiRouter extends CustomRouter {
 
     this.destroy(
       "/:id",
+      ["PUBLIC"],
       passport.authenticate("admin", { session: false }),
       async (req, res, next) => {
         const { id } = req.params;

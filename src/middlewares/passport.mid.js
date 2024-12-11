@@ -11,8 +11,9 @@ import {
 import { createHashUtil } from "../utils/hash.util.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
 import { createTokenUtil, verifyTokenUtil } from "../utils/token.util.js";
+import envUtil from "../utils/env.util.js";
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = process.env;
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = envUtil;
 
 //--REGISTER
 passport.use(
@@ -101,7 +102,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
-      secretOrKey: process.env.SECRET_KEY,
+      secretOrKey: envUtil.SECRET_KEY,
     },
     async (data, done) => {
       try {
@@ -158,7 +159,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
-      secretOrKey: process.env.SECRET_KEY,
+      secretOrKey: envUtil.SECRET_KEY,
     },
     async (data, done) => {
       try {
@@ -183,7 +184,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
-      secretOrKey: process.env.SECRET_KEY,
+      secretOrKey: envUtil.SECRET_KEY,
     },
     async (data, done) => {
       try {

@@ -14,27 +14,48 @@ class SessionApiRouter extends CustomRouter {
     //REGISTER
     this.create(
       "/register",
+      ["PUBLIC"],
       passportCb("register", { session: false }),
       register
     );
 
     //LOGIN
-    this.create("/login", passportCb("login", { session: false }), login);
+    this.create(
+      "/login",
+      ["USER", "ADMIN", "PUBLIC"],
+      passportCb("login", { session: false }),
+      login
+    );
 
     //SINGOUT
-    this.create("/signout", passportCb("signout", { session: false }), signout);
+    this.create(
+      "/signout",
+      ["PUBLIC"],
+      passportCb("signout", { session: false }),
+      signout
+    );
 
     //ONLINE
     this.create(
       "/online",
+      ["PUBLIC"],
       passportCb("online", { session: false }),
       onlineToken
     );
 
     // GOOGLE
-    this.read("/google", passportCb("google", { scope: ["email", "profile"] }));
+    this.read(
+      "/google",
+      ["PUBLIC"],
+      passportCb("google", { scope: ["email", "profile"] })
+    );
 
-    this.read("/google/cb", passportCb("google", { session: false }), google);
+    this.read(
+      "/google/cb",
+      ["PUBLIC"],
+      passportCb("google", { session: false }),
+      google
+    );
   };
 }
 

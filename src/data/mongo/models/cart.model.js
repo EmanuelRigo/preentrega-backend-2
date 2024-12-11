@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
+import envUtil from "../../../utils/env.util.js";
 
 // Anulamos comportamiento de renombre por defecto de colecciones
 mongoose.pluralize(null);
 
 // Colección
-const collection = process.env.CART_COLLECTION;
+const collection = envUtil.CART_COLLECTION;
 
 const schema = new mongoose.Schema(
   {
@@ -18,7 +19,7 @@ const schema = new mongoose.Schema(
       {
         product_id: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: process.env.PRODUCTS_COLLECTION,
+          ref: envUtil.PRODUCTS_COLLECTION,
           required: true,
         },
         quantity: {

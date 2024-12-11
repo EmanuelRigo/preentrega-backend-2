@@ -12,10 +12,12 @@ import handlebars from "express-handlebars";
 import config from "./config.js";
 import http from "http";
 import { Server } from "socket.io";
+import argsUtil from "./src/utils/args.util.js";
+import envUtil from "./src/utils/env.util.js";
 
 //server
 const app = express();
-const port = process.env.PORT;
+const port = envUtil.PORT;
 
 // Crea un servidor HTTP
 const server = http.createServer(app);
@@ -23,7 +25,10 @@ const server = http.createServer(app);
 // Iniciar el servidor
 server.listen(port, () => {
   console.log(`Servidor listo en el puerto: ${port}`);
-  dbConnect();
+  console.log("server on mode", argsUtil.env);
+  if (argsUtil.persistence === "mongo") {
+    dbConnect();
+  }
 });
 // Configura Socket.IO
 const io = new Server(server);
@@ -47,16 +52,16 @@ app.set("views", `${config.DIRNAME}/src/routers/views`);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(cookieParser(process.env.SECRET_KEY));
+app.use(cookieParser(envUtil.SECRET_KEY));
 
 // Configuración de sesión con MongoDB
 app.use(
   session({
-    secret: process.env.SECRET_KEY,
+    secret: envUtil.SECRET_KEY,
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({
-      mongoUrl: process.env.MONGO_LINK,
+      mongoUrl: envUtil.MONGO_LINK,
       ttl: 60 * 60 * 24,
     }),
   })
@@ -66,3 +71,8 @@ app.use(
 app.use(indexRouter);
 app.use(errorHandler);
 app.use(pathHandler);
+
+console.log(argsUtil);
+// console.log(process.pid);
+// console.log(process.argv);
+// console.log(process.argv[3]);
