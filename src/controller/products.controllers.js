@@ -1,4 +1,10 @@
-import { createService } from "../services/products.services.js";
+import {
+  createService,
+  readFilteredService,
+  readAllService,
+  updateService,
+  destroyService,
+} from "../services/products.services.js";
 
 const createProductController = async (req, res) => {
   const message = "PRODUCT CREATED";
@@ -7,4 +13,97 @@ const createProductController = async (req, res) => {
   return res.json201(response, message);
 };
 
-export { createProductController };
+const readProductController = async (req, res) => {
+  const { limit = 10, page = 1, sort, query, available } = req.query;
+
+  const limitNumber = parseInt(limit, 10);
+  const pageNumber = parseInt(page, 10);
+
+  if (isNaN(limitNumber) || limitNumber <= 0) {
+    return res
+      .status(400)
+      .send({ error: "El parámetro 'limit' debe ser un número positivo." });
+  }
+
+  if (isNaN(pageNumber) || pageNumber <= 0) {
+    return res
+      .status(400)
+      .send({ error: "El parámetro 'page' debe ser un número positivo." });
+  }
+  const filter = {};
+  if (query) {
+    console.log("si query", query);
+    filter.category = query;
+    console.log("filter::", filter);
+  }
+
+  if (available) {
+    if (available === "true") {
+      filter.status = true;
+    } else if (available === "false") {
+      filter.status = false;
+    }
+    console.log("filter con disponibilidad:", filter);
+  }
+
+  const options = {
+    limit: limitNumber,
+    page: pageNumber,
+    sort,
+    filter: filter,
+  };
+
+  const response = await readFilteredService(options);
+  console.log(response);
+  const message = "PRODUCTS UPDATED";
+  if (response.docs.length > 0) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
+  }
+};
+
+const readAllController = async (req, res) => {
+  const response = await readAllService();
+  const message = "PRODUCTS UPDATED";
+  if (response.length > 0) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
+  }
+};
+
+const updateController = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const message = "PRODUCT UPDATED";
+  const response = await updateService(id, data);
+
+  if (response) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
+  }
+};
+
+const destroyController = async (req, res) => {
+  const { id } = req.params;
+
+  const message = "PRODUCT DELETED";
+
+  const response = await destroyService(id);
+
+  if (response) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
+  }
+};
+
+export {
+  createProductController,
+  readProductController,
+  readAllController,
+  updateController,
+  destroyController,
+};

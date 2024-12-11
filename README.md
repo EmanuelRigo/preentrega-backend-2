@@ -340,3 +340,7 @@ export default customRouter;
 import customRouter from "./path/to/customRouter";
 app.use("/api", customRouter);
 ```
+
+## Organización del Código
+
+Se ha atomizado el código en **services** y **controllers** para mejorar la modularidad y el mantenimiento del proyecto. Esta estructura permite separar la lógica de negocio de la lógica de manejo de solicitudes, facilitando así la escalabilidad y la legibilidad del código.
