@@ -1,10 +1,10 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
 import {
-  create,
-  read,
-  update,
-  destroy,
-} from "../../data/mongo/managers/users.manager.js";
+  createUserController,
+  readUsersController,
+  updateUserController,
+  destroyUserController,
+} from "../../controller/users.controllers.js";
 
 class UsersApiRouter extends CustomRouter {
   constructor() {
@@ -12,37 +12,12 @@ class UsersApiRouter extends CustomRouter {
     this.init();
   }
   init = () => {
-    this.create("/", ["ADMIN"], createUser);
-    this.read("/", ["ADMIN"], readUsers);
-    this.update("/:id", ["USER", "ADMIN"], updateUser);
-    this.destroy("/:id", ["USER", "ADMIN"], destroyUser);
+    this.create("/", ["ADMIN"], createUserController);
+    this.read("/", ["ADMIN"], readUsersController);
+    this.update("/:id", ["USER", "ADMIN"], updateUserController);
+    this.destroy("/:id", ["USER", "ADMIN"], destroyUserController);
   };
 }
 
 const usersApiRouter = new UsersApiRouter();
 export default usersApiRouter.getRouter();
-
-async function createUser(req, res) {
-  const message = "USER CREATED";
-  const data = req.body;
-  const response = await create(data);
-  return res.status(201).json({ response, message });
-}
-async function readUsers(req, res) {
-  const message = "USERS FOUND";
-  const response = await read();
-  return res.status(200).json({ response, message });
-}
-async function updateUser(req, res) {
-  const { id } = req.params;
-  const data = req.body;
-  const message = "USER UPDATED";
-  const response = await update(id, data);
-  return res.status(200).json({ response, message });
-}
-async function destroyUser(req, res) {
-  const { id } = req.params;
-  const message = "USER DELETED";
-  const response = await destroy(id);
-  return res.status(200).json({ response, message });
-}
