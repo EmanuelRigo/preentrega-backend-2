@@ -189,21 +189,6 @@
         // Función para crear carrito
         async function createCart() {
             try {
-                const response = await fetch("/api/sessions/online", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: 'include'
-                });
-
-                const result = await response.json();
-
-                if (!result.online) {
-                    alert("Debes iniciar sesión para crear un carrito");
-                    return;
-                }
-
                 const url = "/api/carts";
                 const opts = {
                     method: "POST",
@@ -214,17 +199,18 @@
                 };
 
                 const cartResponse = await fetch(url, opts);
+                console.log("cartResponse", cartResponse);
                 const cartResult = await cartResponse.json();
-
-                if (cartResponse.ok) {
+                console.log("cartresult", cartResult);
+                if (cartResponse) {
                     alert("Carrito creado exitosamente");
-                    window.location.href = `/carts/${cartResult.cart._id}`;
+                    window.location.href = `/carts/${cartResult.data._id}`;
                 } else {
-                    alert("Error al crear el carrito");
+                    alert("Error al crear el carrito3");
                 }
             } catch (error) {
-                console.error("Error al crear carrito:", error);
-                alert("Error al crear el carrito");
+                console.error("Error al crear carrito4:", error);
+                alert("Error al crear el carrito2");
             }
         }
 

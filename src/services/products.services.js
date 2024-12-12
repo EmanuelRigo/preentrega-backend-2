@@ -1,12 +1,3 @@
-// import {
-//   create,
-//   readById,
-//   update,
-//   destroy,
-//   getAll,
-//   getFiltered,
-// } from "../data/mongo/managers/product.manager";
-
 import {
   create,
   getFiltered,

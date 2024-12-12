@@ -55,6 +55,15 @@ class Manager {
     }
   };
 
+  read = async (data) => {
+    try {
+      const all = await this.model.find(data).lean();
+      return all;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   readByEmail = async (email) => {
     try {
       const one = await this.model.findOne({ email }).lean();
@@ -70,6 +79,34 @@ class Manager {
       return one;
     } catch (error) {
       throw error;
+    }
+  };
+
+  readByIdPopulate = async (data) => {
+    try {
+      console.log("data:", data);
+      const cart = await this.model
+        .findOne(data)
+        .populate("products._id")
+        .lean();
+
+      console.log("Cart with populated products:", cart);
+      return cart;
+    } catch (err) {
+      console.error("Error al buscar el carrito:", err);
+      return null;
+    }
+  };
+
+  addProduct = async (data) => {
+    try {
+      const updateData = {
+        products: data.products,
+        updatedAt: new Date(),
+      };
+      return await this.update(data._id, updateData);
+    } catch (err) {
+      console.error("Error al actualizar el carrito", err);
     }
   };
 

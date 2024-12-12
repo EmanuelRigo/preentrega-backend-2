@@ -1,89 +1,105 @@
 import cartModel from "../models/cart.model.js";
+import Manager from "./manager.js";
 
-class CartController {
-  constructor() {}
+const cartManager = new Manager(cartModel);
+const {
+  read,
+  getAll,
+  readById,
+  create,
+  update,
+  readByIdPopulate,
+  addProduct,
+  destroy,
+} = cartManager;
 
-  get = async () => {
-    try {
-      return await cartModel.find().lean();
-    } catch (err) {
-      return err.message;
-    }
-  };
+export {
+  read,
+  getAll,
+  readById,
+  create,
+  update,
+  readByIdPopulate,
+  addProduct,
+  destroy,
+};
 
-  fOne = async (data) => {
-    try {
-      console.log("data:", data);
-      const cart = await cartModel.findOne(data).lean();
+// class CartController {
+//   constructor() {}
 
-      console.log("Cart with populated products:", cart);
-      return cart;
-    } catch (err) {
-      console.error("Error al buscar el carrito:", err);
-      return null;
-    }
-  };
+//   // get = async () => {
+//   //   try {
+//   //     return await cartModel.find().lean();
+//   //   } catch (err) {
+//   //     return err.message;
+//   //   }
+//   // };
 
-  getOne = async (data) => {
-    try {
-      console.log("data:", data);
-      const cart = await cartModel
-        .findOne(data)
-        .populate("products._id")
-        .lean();
+//   // fOne = async (data) => {
+//   //   try {
+//   //     const cart = await cartModel.findOne(data).lean();
+//   //     return cart;
+//   //   } catch (err) {
+//   //     return null;
+//   //   }
+//   // };
 
-      console.log("Cart with populated products:", cart);
-      return cart;
-    } catch (err) {
-      console.error("Error al buscar el carrito:", err);
-      return null;
-    }
-  };
+//   // getOne = async (data) => {
+//   //   try {
+//   //     console.log("data:", data);
+//   //     const cart = await cartModel
+//   //       .findOne(data)
+//   //       .populate("products._id")
+//   //       .lean();
 
-  addProduct = async (data) => {
-    try {
-      console.log(data);
+//   //     console.log("Cart with populated products:", cart);
+//   //     return cart;
+//   //   } catch (err) {
+//   //     console.error("Error al buscar el carrito:", err);
+//   //     return null;
+//   //   }
+//   // };
 
-      const filter = { _id: data._id };
-      const update = {
-        $set: {
-          products: data.products,
-          updatedAt: new Date(),
-        },
-      };
+//   // addProduct = async (data) => {
+//   //   try {
+//   //     const filter = { _id: data._id };
+//   //     const update = {
+//   //       $set: {
+//   //         products: data.products,
+//   //         updatedAt: new Date(),
+//   //       },
+//   //     };
+//   //     return await cartModel
+//   //       .findOneAndUpdate(filter, update, { new: true })
+//   //       .lean(); // Devuelve el carrito actualizado
+//   //   } catch (err) {
+//   //     console.error("Error al actualizar el carrito", err); // Manejo de errores
+//   //   }
+//   // };
 
-      // Realiza la actualización
-      return await cartModel
-        .findOneAndUpdate(filter, update, { new: true })
-        .lean(); // Devuelve el carrito actualizado
-    } catch (err) {
-      console.error("Error al actualizar el carrito", err); // Manejo de errores
-    }
-  };
+//   // add = async (data) => {
+//   //   try {
+//   //     return await cartModel.create({ data });
+//   //   } catch (err) {
+//   //     return err.message;
+//   //   }
+//   // };
 
-  add = async (data) => {
-    try {
-      return await cartModel.create({ data });
-    } catch (err) {
-      return err.message;
-    }
-  };
+//   // update = async (filter, updated, options) => {
+//   //   try {
+//   //     return await cartModel.findOneAndUpdate(filter, updated, options);
+//   //   } catch (err) {
+//   //     return err.message;
+//   //   }
+//   // };
 
-  update = async (filter, updated, options) => {
-    try {
-      return await cartModel.findOneAndUpdate(filter, updated, options);
-    } catch (err) {
-      return err.message;
-    }
-  };
+//   // delete = async (data, options) => {
+//   //   try {
+//   //     return await cartModel.findOneAndDelete(data, options);
+//   //   } catch (err) {
+//   //     return err.message;
+//   //   }
+//   // };
+// }
 
-  delete = async (data, options) => {
-    try {
-      return await cartModel.findOneAndDelete(data, options);
-    } catch (err) {
-      return err.message;
-    }
-  };
-}
-
-export default CartController;
+// export default CartController;

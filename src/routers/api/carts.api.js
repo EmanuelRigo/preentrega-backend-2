@@ -1,7 +1,10 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
-
-import CartController from "../../data/mongo/managers/cart.manager.js";
+//import CartController from "../../data/mongo/managers/cart.manager.js";
 import passport from "../../middlewares/passport.mid.js";
+import {
+  createCartController,
+  readCartsController,
+} from "../../controller/carts.controllers.js";
 
 class CartsApiRouter extends CustomRouter {
   constructor() {
@@ -9,10 +12,7 @@ class CartsApiRouter extends CustomRouter {
     this.init();
   }
   init = () => {
-    this.read("/", async (req, res) => {
-      const process = await controller.get();
-      res.status(200).send({ error: null, data: process });
-    });
+    this.read("/", ["USER", "ADMIN", "PUBLIC"], readCartsController);
 
     this.read("/:cid", async (req, res) => {
       const cartID = req.params.cid;
@@ -23,11 +23,9 @@ class CartsApiRouter extends CustomRouter {
 
     this.create(
       "/",
+      ["USER", "ADMIN"],
       passport.authenticate("online", { session: false }),
-      async (req, res) => {
-        const process = await controller.add({ products: [] });
-        res.status(201).send({ error: null, data: process });
-      }
+      createCartController
     );
 
     this.update("/:cid/products/:pid", async (req, res) => {
@@ -101,7 +99,7 @@ class CartsApiRouter extends CustomRouter {
   };
 }
 
-const controller = new CartController();
+//const controller = new CartController();
 
 let storeProducts = [];
 

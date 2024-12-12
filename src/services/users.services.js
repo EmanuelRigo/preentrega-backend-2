@@ -1,4 +1,3 @@
-import { response } from "express";
 import {
   create,
   read,
@@ -21,8 +20,6 @@ async function updateService(id, data) {
   return response;
 }
 
-async function destroyService(id) {
-  const response = await destroy(id);
-}
+const destroyService = async (id) => await destroy(id);
 
 export { createService, readService, updateService, destroyService };
