@@ -28,7 +28,6 @@ router.get("/products", async (req, res) => {
       .render("error", { message: "Error al cargar los productos" });
   }
 });
-
 //ok
 router.get("/products/:pid", async (req, res) => {
   const pid = req.params.pid;
@@ -44,7 +43,7 @@ router.get("/products/:pid", async (req, res) => {
       .render("error", { message: "Error al cargar los productos" });
   }
 });
-
+//ok
 router.get("/:cid/products/:pid", async (req, res) => {
   const pid = req.params.pid;
   const cid = req.params.cid;
@@ -60,21 +59,30 @@ router.get("/:cid/products/:pid", async (req, res) => {
       .render("error", { message: "Error al cargar los productos" });
   }
 });
-
+//ok
 router.get("/products/paginated/:pg", async (req, res) => {
-  const pg = req.params.pg;
-  const products = await getPaginated(pg);
-  res.status(200).render("home", { products });
-});
-
-router.get("/:cid/products", async (req, res) => {
-  const cid = req.params.cid;
+  const { pg } = req.params; // Obtenemos el valor de la página desde params
+  console.log("pg", pg);
 
   try {
+    let url = `http://localhost:9000/api/products/paginated/${pg}`;
+    const response = await fetch(url);
+    const products = await response.json();
+    console.log("produ", products);
+    res.render("home", { products: products.response });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res
+      .status(500)
+      .render("error", { message: "Error al cargar los productos" });
+  }
+});
+//ok
+router.get("/:cid/products", async (req, res) => {
+  const cid = req.params.cid;
+  try {
     let url = "http://localhost:9000/api/products";
-
     const queryParams = new URLSearchParams(req.query);
-
     if (queryParams.toString()) {
       url += `?${queryParams.toString()}`;
     }
@@ -90,48 +98,28 @@ router.get("/:cid/products", async (req, res) => {
   }
 });
 
-router.get("/realTimeProducts", (req, res) => {
-  res.status(200).render("realTimeProducts");
-});
-
-router.get("/realTimeProducts/paginated/:pg", (req, res) => {
-  const pg = req.params.pg;
-  res.status(200).render("realTimeProducts", { pg });
-});
-
 //ok
-// router.get(
-//   "/carts",
-//   readCartsController,
-//   res.re
-//   //    async (req, res) => {
-//   //   try {
-//   //     const response = await fetch("http://localhost:9000/api/carts");
-//   //     const carts = await response.json();
-//   //     console.log("carts:", carts);
-//   //     console.log("holaaaaaaaaaaaa");
-//   //     res.render("carts", { carts: carts.data });
-//   //   } catch (error) {
-//   //     console.error("Error al obtener productos:", error);
-//   //     res
-//   //       .status(500)
-//   //       .render("error", { message: "Error al cargar los productos" });
-//   //   }
-//   // }
-// );
-
-router.get("/carts", async (req, res) => {
-  console.log("gola");
+router.get("/realTimeProducts", async (req, res) => {
   try {
-    let url = "http://localhost:9000/api/carts";
-    // const queryParams = new URLSearchParams(req.query);
-    // if (queryParams.toString()) {
-    //   url += `?${queryParams.toString()}`;
-    // }
+    let url = "http://localhost:9000/api/products/all";
     console.log(url);
     const response = await fetch(url);
+    const products = await response.json();
+    console.log("carts:", products);
+    res.render("realTimeProducts", { products: products.response });
+  } catch (error) {
+    console.error("Error al obtener carts:", error);
+    res
+      .status(500)
+      .render("error", { message: "Error al cargar los carritos" });
+  }
+});
+//ok
+router.get("/carts", async (req, res) => {
+  try {
+    let url = "http://localhost:9000/api/carts";
+    const response = await fetch(url);
     const carts = await response.json();
-    console.log("carts:", carts);
     res.render("carts", { carts: carts.data });
   } catch (error) {
     console.error("Error al obtener carts:", error);
@@ -140,18 +128,17 @@ router.get("/carts", async (req, res) => {
       .render("error", { message: "Error al cargar los carritos" });
   }
 });
-
 //ok
 router.get("/carts/:cid", async (req, res) => {
   const cid = req.params.cid;
   const cart = await readByIdPopulate({ _id: cid });
   res.status(200).render("cart", { cart });
 });
-
+//ok
 router.get("/register", (req, res) => {
   res.status(200).render("register");
 });
-
+//ok
 router.get("/login", (req, res) => {
   res.status(200).render("login");
 });

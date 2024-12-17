@@ -29,10 +29,14 @@ const readOneProductController = async (req, res) => {
 };
 
 const readProductsController = async (req, res) => {
-  const { limit = 10, page = 1, sort, query, available } = req.query;
+  const { limit = 10, sort, query, available } = req.query;
+  const pg = req.params.page || 1;
+  console.log("page", pg);
+  console.log("params:", req.params.page);
+  console.log(pg);
 
   const limitNumber = parseInt(limit, 10);
-  const pageNumber = parseInt(page, 10);
+  const pageNumber = parseInt(pg, 10);
 
   if (isNaN(limitNumber) || limitNumber <= 0) {
     return res
@@ -45,7 +49,9 @@ const readProductsController = async (req, res) => {
       .status(400)
       .send({ error: "El parámetro 'page' debe ser un número positivo." });
   }
+
   const filter = {};
+
   if (query) {
     console.log("si query", query);
     filter.category = query;
@@ -65,16 +71,20 @@ const readProductsController = async (req, res) => {
     limit: limitNumber,
     page: pageNumber,
     sort,
-    filter: filter,
+    filter,
   };
 
-  const response = await readFilteredService(options);
-  console.log(response);
-  const message = "PRODUCTS UPDATED";
-  if (response.docs.length > 0) {
-    return res.json201(response, message);
-  } else {
-    return res.json404();
+  try {
+    const response = await readFilteredService(options);
+    const message = "PRODUCTS UPDATED";
+    if (response.docs.length > 0) {
+      return res.json201(response, message);
+    } else {
+      return res.json404();
+    }
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    return res.status(500).send({ error: "Error interno del servidor" });
   }
 };
 
