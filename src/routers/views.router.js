@@ -33,11 +33,10 @@ router.get("/products", async (req, res) => {
 router.get("/products/:pid", async (req, res) => {
   const pid = req.params.pid;
   try {
-    console.log("pid:", pid);
-
-    // Añadir .lean() a la consulta
-    const product = await readById({ _id: pid });
-    res.render("product", { product });
+    let url = `http://localhost:9000/api/products/${pid}`;
+    const response = await fetch(url);
+    const product = await response.json();
+    res.render("product", { product: product.response });
   } catch (error) {
     console.error("Error al obtener productos:", error);
     res
@@ -46,13 +45,14 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
-//ok
 router.get("/:cid/products/:pid", async (req, res) => {
   const pid = req.params.pid;
   const cid = req.params.cid;
   try {
-    const product = await ProController.getOne({ _id: pid });
-    res.render("product", { product, cid });
+    let url = `http://localhost:9000/api/products/${pid}`;
+    const response = await fetch(url);
+    const product = await response.json();
+    res.render("product", { product: product.response, cid });
   } catch (error) {
     console.error("Error al obtener productos:", error);
     res
@@ -61,14 +61,12 @@ router.get("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-//ok
 router.get("/products/paginated/:pg", async (req, res) => {
   const pg = req.params.pg;
   const products = await getPaginated(pg);
   res.status(200).render("home", { products });
 });
 
-//ok
 router.get("/:cid/products", async (req, res) => {
   const cid = req.params.cid;
 
@@ -92,7 +90,6 @@ router.get("/:cid/products", async (req, res) => {
   }
 });
 
-//ok
 router.get("/realTimeProducts", (req, res) => {
   res.status(200).render("realTimeProducts");
 });

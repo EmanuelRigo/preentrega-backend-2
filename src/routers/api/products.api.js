@@ -4,7 +4,8 @@ import {
   createProductController,
   destroyController,
   readAllController,
-  readProductController,
+  readOneProductController,
+  readProductsController,
   updateController,
 } from "../../controller/products.controllers.js";
 
@@ -21,7 +22,9 @@ class ProductsApiRouter extends CustomRouter {
       createProductController
     );
 
-    this.read("/", ["PUBLIC"], readProductController);
+    this.read("/", ["PUBLIC"], readProductsController);
+
+    this.read("/:pid", ["PUBLIC"], readOneProductController);
 
     this.read("/all", ["PUBLIC"], readAllController);
 

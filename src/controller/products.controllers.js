@@ -2,6 +2,7 @@ import {
   createService,
   readFilteredService,
   readAllService,
+  readOneService,
   updateService,
   destroyService,
 } from "../services/products.services.js";
@@ -13,7 +14,21 @@ const createProductController = async (req, res) => {
   return res.json201(response, message);
 };
 
-const readProductController = async (req, res) => {
+const readOneProductController = async (req, res) => {
+  const id = req.params.pid;
+  console.log("id", id);
+
+  const response = await readOneService(id);
+  console.log("reponse", response);
+  const message = "PRODUCT READ";
+  if (response) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
+  }
+};
+
+const readProductsController = async (req, res) => {
   const { limit = 10, page = 1, sort, query, available } = req.query;
 
   const limitNumber = parseInt(limit, 10);
@@ -102,8 +117,9 @@ const destroyController = async (req, res) => {
 
 export {
   createProductController,
-  readProductController,
+  readProductsController,
   readAllController,
+  readOneProductController,
   updateController,
   destroyController,
 };

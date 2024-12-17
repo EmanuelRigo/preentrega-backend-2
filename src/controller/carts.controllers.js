@@ -6,6 +6,17 @@ import {
 import jwt from "jsonwebtoken";
 import envUtil from "../utils/env.util.js";
 
+async function readCartController(req, res) {
+  try {
+    const id = req.params.cid;
+    const process = await readService(id);
+    return res.status(200).send({ error: null, data: process });
+  } catch (error) {
+    console.log("Error al leer el carrito", error);
+    return res.status(500).send({ error: "Error al leer el carrito" });
+  }
+}
+
 async function readCartsController(req, res) {
   console.log("READCONTROLLERS!!!!!!!!!!!!!!");
   try {

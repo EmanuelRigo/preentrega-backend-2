@@ -4,6 +4,7 @@ import {
   getAll,
   update,
   destroy,
+  readById,
 } from "../data/mongo/managers/product.manager.js";
 
 async function createService(data) {
@@ -13,6 +14,11 @@ async function createService(data) {
 
 async function readFilteredService(pg) {
   const response = await getFiltered(pg);
+  return response;
+}
+
+async function readOneService(id) {
+  const response = await readById(id);
   return response;
 }
 
@@ -32,6 +38,7 @@ export {
   createService,
   readFilteredService,
   readAllService,
+  readOneService,
   updateService,
   destroyService,
 };
