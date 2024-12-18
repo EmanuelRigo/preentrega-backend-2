@@ -1,7 +1,11 @@
 import {
   readService,
   readAllService,
+  readOneService,
   createCartService,
+  addProductService,
+  destroyService,
+  updateCartService,
 } from "../services/carts.services.js";
 import jwt from "jsonwebtoken";
 import envUtil from "../utils/env.util.js";
@@ -14,6 +18,20 @@ async function readCartController(req, res) {
   } catch (error) {
     console.log("Error al leer el carrito", error);
     return res.status(500).send({ error: "Error al leer el carrito" });
+  }
+}
+
+async function readOneCartController(req, res) {
+  const id = req.params.cid;
+  console.log("cid", id);
+
+  const response = await readOneService(id);
+  console.log("reponse", response);
+  const message = "CART READ";
+  if (response) {
+    return res.json201(response, message);
+  } else {
+    return res.json404();
   }
 }
 
@@ -32,7 +50,6 @@ async function readCartsController(req, res) {
 async function createCartController(req, res) {
   try {
     const token = req.cookies.token;
-    console.log("🚀 ~ createCartController ~  token:", token);
 
     if (!token) {
       return res.status(401).send({ error: "No se proporcionó token" });
@@ -54,4 +71,67 @@ async function createCartController(req, res) {
   }
 }
 
-export { readCartsController, createCartController };
+async function updateCartController(req, res) {
+  try {
+    const pid = req.params.pid;
+    console.log("pid2:", pid);
+    const cid = req.params.cid;
+    console.log("cid:", cid);
+    const cart = await readOneService({ _id: cid });
+    console.log("cart::", cart);
+    if (!cart) {
+      console.log("Carrito no encontrado:", cart);
+      return res.status(406).send({ error: "Carrito no encontrado" });
+    }
+
+    const productInCart = cart.products.find(
+      (product) => product._id.toString() === pid
+    );
+
+    if (productInCart) {
+      productInCart.quantity += 1;
+    } else {
+      cart.products.push({ _id: pid, quantity: 1 });
+    }
+
+    const cartToUpdate = {
+      _id: cart._id.toString(),
+      products: cart.products,
+    };
+
+    const updatedCart = await addProductService(cartToUpdate);
+    console.log("🚀 ~ updateCartController ~ updatedCart :", updatedCart);
+
+    res.status(200).send({ error: null, data: updatedCart });
+  } catch (error) {
+    console.log("error al hacer update en el carrito", error);
+    res.status(500).send({ error: "Error al hacer update" });
+  }
+}
+
+async function destroyProductsController(req, res) {
+  const { cid } = req.params;
+
+  const cart = await readOneService({ _id: cid });
+  console.log("cart:", cart);
+
+  if (!cart) {
+    return res.status(404).send({ error: "Carrito no encontrado" });
+  }
+
+  const updatedCart = await updateCartService(
+    { _id: cid },
+    { products: [] },
+    { new: true }
+  );
+
+  res.status(200).send({ error: null, data: updatedCart });
+}
+
+export {
+  readCartsController,
+  readOneCartController,
+  createCartController,
+  updateCartController,
+  destroyProductsController,
+};

@@ -128,11 +128,26 @@ router.get("/carts", async (req, res) => {
       .render("error", { message: "Error al cargar los carritos" });
   }
 });
-//ok
+
 router.get("/carts/:cid", async (req, res) => {
-  const cid = req.params.cid;
-  const cart = await readByIdPopulate({ _id: cid });
-  res.status(200).render("cart", { cart });
+  // const { cid } = req.query;
+  const cid = req.params.cid; // Obtenemos el valor de la página desde params
+  console.log("cid:", cid);
+
+  try {
+    console.log("cid2:", cid);
+
+    let url = `http://localhost:9000/api/carts/${cid}`;
+    const response = await fetch(url);
+    const cart = await response.json();
+    console.log("cart:", cart);
+    res.render("cart", { cart: cart.response });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res
+      .status(500)
+      .render("error", { message: "Error al cargar los productos" });
+  }
 });
 //ok
 router.get("/register", (req, res) => {

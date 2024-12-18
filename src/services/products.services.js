@@ -12,8 +12,8 @@ async function createService(data) {
   return response;
 }
 
-async function readFilteredService(pg) {
-  const response = await getFiltered(pg);
+async function readFilteredService(opt) {
+  const response = await getFiltered(opt);
   return response;
 }
 
