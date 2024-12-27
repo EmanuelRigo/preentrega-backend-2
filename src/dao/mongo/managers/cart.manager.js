@@ -2,27 +2,30 @@ import cartModel from "../models/cart.model.js";
 import Manager from "./manager.js";
 
 const cartManager = new Manager(cartModel);
-const {
-  read,
-  getAll,
-  readById,
-  create,
-  update,
-  readByIdPopulate,
-  addProduct,
-  destroy,
-} = cartManager;
 
-export {
-  read,
-  getAll,
-  readById,
-  create,
-  update,
-  readByIdPopulate,
-  addProduct,
-  destroy,
-};
+export default cartManager
+
+// const {
+//   read,
+//   getAll,
+//   readById,
+//   create,
+//   update,
+//   readByIdPopulate,
+//   addProduct,
+//   destroy,
+// } = cartManager;
+
+// export {
+//   read,
+//   getAll,
+//   readById,
+//   create,
+//   update,
+//   readByIdPopulate,
+//   addProduct,
+//   destroy,
+// };
 
 // class CartController {
 //   constructor() {}

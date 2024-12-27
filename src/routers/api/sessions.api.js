@@ -1,9 +1,13 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
 import passport from "../../middlewares/passport.mid.js";
-import { readById } from "../../data/mongo/managers/users.manager.js";
+//import { readById } from "../../dao/mongo/managers/users.manager.js";
 import { verifyTokenUtil } from "../../utils/token.util.js";
 import passportCb from "../../middlewares/passportCb.mid.js";
 import { response } from "express";
+
+import dao from "../../dao/factory.js";
+const { UsersManager } = dao;
+const {readById} = UsersManager;
 
 class SessionApiRouter extends CustomRouter {
   constructor() {

@@ -2,16 +2,20 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import {
-  readByEmail,
-  create,
-  readById,
-  update,
-} from "../data/mongo/managers/users.manager.js";
+// import {
+//   readByEmail,
+//   create,
+//   readById,
+//   update,
+// } from "../dao/mongo/managers/users.manager.js";
 import { createHashUtil } from "../utils/hash.util.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
 import { createTokenUtil, verifyTokenUtil } from "../utils/token.util.js";
 import envUtil from "../utils/env.util.js";
+import dao from "../dao/factory.js";
+const { UsersManager } = dao;
+console.log("🚀 ~ UsersManager :", UsersManager )
+
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = envUtil;
 
@@ -25,7 +29,7 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const userExists = await readByEmail(email);
+        const userExists = await UsersManager.readByEmail(email);
         if (userExists) {
           const info = {
             message: "User already exists",
@@ -35,7 +39,7 @@ passport.use(
         }
         req.body.password = createHashUtil(password);
         const data = req.body;
-        const user = await create(data);
+        const user = await UsersManager.create(data);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -61,7 +65,7 @@ passport.use(
           return done(null, false, info);
         }
 
-        const user = await readByEmail(email);
+        const user = await UsersManager.readByEmail(email);
         if (!user) {
           const info = {
             message: "INVALID CREDENTIALS",
@@ -79,7 +83,7 @@ passport.use(
           return done(null, false, info);
         }
 
-        await update(user._id, { isOnline: true });
+        await UsersManager.update(user._id, { isOnline: true });
         const data = {
           user_id: user._id,
           role: user.role,
@@ -115,7 +119,7 @@ passport.use(
           };
           return done(null, false, info);
         }
-        const user = await readById(user_id);
+        const user = await UsersManager.readById(user_id);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -136,9 +140,9 @@ passport.use(
     async (req, accessToken, refreshToken, profile, done) => {
       try {
         const { id, picture } = profile;
-        let user = await readByEmail(id);
+        let user = await UsersManager.readByEmail(id);
         if (!user) {
-          user = await create({
+          user = await UsersManager.create({
             email: id,
             photo: picture,
             password: createHashUtil(id),
@@ -165,7 +169,7 @@ passport.use(
       try {
         console.log("Signout data:", data);
         const { user_id } = data;
-        await update(user_id, { isOnline: false });
+        await UsersManager.update(user_id, { isOnline: false });
         return done(null, { user_id: null });
       } catch (error) {
         const info = {
@@ -190,7 +194,7 @@ passport.use(
       try {
         console.log("JWT payload:", data);
         const { user_id } = data;
-        const user = await readById(user_id);
+        const user = await UsersManager.readById(user_id);
         console.log("Usuario encontrado:", user);
 
         if (!user) {
@@ -234,7 +238,7 @@ passport.use(
       try {
         const token = req.token;
         const { user_id } = verifyTokenUtil(token);
-        const user = await readById(user_id);
+        const user = await UsersManager.readById(user_id);
         const { isOnline } = user;
         if (!isOnline) {
           const info = {

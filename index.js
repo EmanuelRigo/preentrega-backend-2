@@ -14,7 +14,8 @@ import http from "http";
 import { Server } from "socket.io";
 import argsUtil from "./src/utils/args.util.js";
 import envUtil from "./src/utils/env.util.js";
-
+import cors from "cors";
+ 
 //server
 const app = express();
 const port = envUtil.PORT;
@@ -26,9 +27,9 @@ const server = http.createServer(app);
 server.listen(port, () => {
   console.log(`Servidor listo en el puerto: ${port}`);
   console.log("server on mode", argsUtil.env);
-  if (argsUtil.persistence === "mongo") {
-    dbConnect();
-  }
+  // if (argsUtil.persistence === "mongo") {
+  //   dbConnect();
+  // }
 });
 // Configura Socket.IO
 const io = new Server(server);
@@ -66,6 +67,9 @@ app.use(
     }),
   })
 );
+
+//CORS
+app.use(cors({origin: true, credentials: true}));
 
 //routers
 app.use(indexRouter);

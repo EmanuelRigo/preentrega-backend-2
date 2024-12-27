@@ -1,11 +1,14 @@
 import { Router } from "express";
-//import CartController from "../data/mongo/managers/cart.manager.js";
-import {
-  readById,
-  getPaginated,
-} from "../data/mongo/managers/product.manager.js";
-import { readByIdPopulate } from "../data/mongo/managers/cart.manager.js";
-import { readCartsController } from "../controller/carts.controllers.js";
+//import CartController from "../dao/mongo/managers/cart.manager.js";
+// import {
+//   readById,
+//   getPaginated,
+// } from "../dao/mongo/managers/product.manager.js";
+// import { readByIdPopulate } from "../dao/mongo/managers/cart.manager.js";
+// import { readCartsController } from "../controller/carts.controllers.js";
+
+// import dao from "../dao/factory.js";
+// const {productManager} = dao; 
 
 //const CaController = new CartController();
 const router = Router();

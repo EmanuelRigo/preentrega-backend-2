@@ -1,4 +1,4 @@
-import { readByEmail } from "../data/mongo/managers/users.manager.js";
+import { readByEmail } from "../dao/mongo/managers/users.manager.js";
 
 async function isUser(req, res, next) {
   const { email } = req.body;

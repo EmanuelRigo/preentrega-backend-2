@@ -1,4 +1,4 @@
-import { readByEmail } from "../data/mongo/managers/users.manager.js";
+import { readByEmail } from "../dao/mongo/managers/users.manager.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
 
 async function verifyHash(req, res, next) {

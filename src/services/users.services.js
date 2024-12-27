@@ -1,9 +1,15 @@
-import {
-  create,
-  read,
-  update,
-  destroy,
-} from "../data/mongo/managers/users.manager.js";
+// import {
+//   create,
+//   read,
+//   update,
+//   destroy,
+// } from "../dao/mongo/managers/users.manager.js";
+
+import dao from "../dao/factory.js";
+
+const { UsersManager } = dao;
+console.log("🚀 ~ UsersManager:", UsersManager)
+
 
 async function createService(data) {
   const response = await create(data);

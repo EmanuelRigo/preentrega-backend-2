@@ -111,20 +111,15 @@ async function updateCartController(req, res) {
 
 async function destroyProductsController(req, res) {
   const { cid } = req.params;
-
   const cart = await readOneService({ _id: cid });
-  console.log("cart:", cart);
-
   if (!cart) {
     return res.status(404).send({ error: "Carrito no encontrado" });
   }
-
   const updatedCart = await updateCartService(
     { _id: cid },
     { products: [] },
     { new: true }
   );
-
   res.status(200).send({ error: null, data: updatedCart });
 }
 
