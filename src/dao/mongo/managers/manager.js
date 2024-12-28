@@ -84,7 +84,6 @@ class Manager {
 
   readByIdPopulate = async (data) => {
     try {
-      console.log("data:", data);
       const cart = await this.model
         .findOne(data)
         .populate("products._id")

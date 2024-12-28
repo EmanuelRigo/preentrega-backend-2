@@ -16,10 +16,7 @@ const createProductController = async (req, res) => {
 
 const readOneProductController = async (req, res) => {
   const id = req.params.pid;
-  console.log("id", id);
-
   const response = await readOneService(id);
-  console.log("reponse", response);
   const message = "PRODUCT READ";
   if (response) {
     return res.json201(response, message);
@@ -31,10 +28,6 @@ const readOneProductController = async (req, res) => {
 const readProductsController = async (req, res) => {
   const { limit = 10, sort, query, available } = req.query;
   const pg = req.params.page || 1;
-  console.log("page", pg);
-  console.log("params:", req.params.page);
-  console.log(pg);
-
   const limitNumber = parseInt(limit, 10);
   const pageNumber = parseInt(pg, 10);
 
@@ -53,9 +46,7 @@ const readProductsController = async (req, res) => {
   const filter = {};
 
   if (query) {
-    console.log("si query", query);
     filter.category = query;
-    console.log("filter::", filter);
   }
 
   if (available) {

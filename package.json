@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js --env dev",
+    "dev-fs": "nodemon ./index.js --persistence fs",
+    "dev-mem": "nodemon ./index.js --persistence memory",
     "args-test": "nodemon ./index.js --env test",
     "args-fs": "nodemon ./index.js --persistence fs 8080 development mongo user=igna"
   },

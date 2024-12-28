@@ -89,8 +89,6 @@
         try {
             const response = await fetch('/api/products/all');
             const result = await response.json();
-            console.log("result:", result)
-
             if (Array.isArray(result.response)) {
                 data = result.response.reverse();
             } else if (result.response && Array.isArray(result.response)) {

@@ -23,10 +23,7 @@ async function readCartController(req, res) {
 
 async function readOneCartController(req, res) {
   const id = req.params.cid;
-  console.log("cid", id);
-
   const response = await readOneService(id);
-  console.log("reponse", response);
   const message = "CART READ";
   if (response) {
     return res.json201(response, message);
@@ -36,10 +33,8 @@ async function readOneCartController(req, res) {
 }
 
 async function readCartsController(req, res) {
-  console.log("READCONTROLLERS!!!!!!!!!!!!!!");
   try {
     const process = await readAllService();
-    console.log("process:", process);
     return res.status(200).send({ error: null, data: process });
   } catch (error) {
     console.error("Error al leer los carritos:", error);
@@ -55,8 +50,6 @@ async function createCartController(req, res) {
       return res.status(401).send({ error: "No se proporcionó token" });
     }
     const decoded = jwt.verify(token, envUtil.SECRET_KEY);
-    console.log("Contenido decodificado del token:", decoded);
-
     const userId = decoded.user_id;
     if (!userId) {
       return res
@@ -74,11 +67,8 @@ async function createCartController(req, res) {
 async function updateCartController(req, res) {
   try {
     const pid = req.params.pid;
-    console.log("pid2:", pid);
     const cid = req.params.cid;
-    console.log("cid:", cid);
     const cart = await readOneService({ _id: cid });
-    console.log("cart::", cart);
     if (!cart) {
       console.log("Carrito no encontrado:", cart);
       return res.status(406).send({ error: "Carrito no encontrado" });
@@ -100,8 +90,6 @@ async function updateCartController(req, res) {
     };
 
     const updatedCart = await addProductService(cartToUpdate);
-    console.log("🚀 ~ updateCartController ~ updatedCart :", updatedCart);
-
     res.status(200).send({ error: null, data: updatedCart });
   } catch (error) {
     console.log("error al hacer update en el carrito", error);

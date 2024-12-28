@@ -199,9 +199,7 @@
                 };
 
                 const cartResponse = await fetch(url, opts);
-                console.log("cartResponse", cartResponse);
                 const cartResult = await cartResponse.json();
-                console.log("cartresult", cartResult);
                 if (cartResponse) {
                     alert("Carrito creado exitosamente");
                     window.location.href = `/carts/${cartResult.data._id}`;

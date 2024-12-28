@@ -6,7 +6,6 @@ import MongoStore from "connect-mongo";
 import pathHandler from "./src/middlewares/pathHandler.mid.js";
 import errorHandler from "./src/middlewares/errorHandler.mid.js";
 import indexRouter from "./src/routers/index.router.js";
-import dbConnect from "./src/utils/dbconnect.utils.js";
 import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
 import config from "./config.js";
@@ -27,9 +26,6 @@ const server = http.createServer(app);
 server.listen(port, () => {
   console.log(`Servidor listo en el puerto: ${port}`);
   console.log("server on mode", argsUtil.env);
-  // if (argsUtil.persistence === "mongo") {
-  //   dbConnect();
-  // }
 });
 // Configura Socket.IO
 const io = new Server(server);
@@ -75,8 +71,3 @@ app.use(cors({origin: true, credentials: true}));
 app.use(indexRouter);
 app.use(errorHandler);
 app.use(pathHandler);
-
-console.log(argsUtil);
-// console.log(process.pid);
-// console.log(process.argv);
-// console.log(process.argv[3]);

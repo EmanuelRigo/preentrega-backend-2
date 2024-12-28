@@ -64,14 +64,11 @@ router.get("/:cid/products/:pid", async (req, res) => {
 });
 //ok
 router.get("/products/paginated/:pg", async (req, res) => {
-  const { pg } = req.params; // Obtenemos el valor de la página desde params
-  console.log("pg", pg);
-
+  const { pg } = req.params; 
   try {
     let url = `http://localhost:9000/api/products/paginated/${pg}`;
     const response = await fetch(url);
     const products = await response.json();
-    console.log("produ", products);
     res.render("home", { products: products.response });
   } catch (error) {
     console.error("Error al obtener productos:", error);
@@ -91,7 +88,6 @@ router.get("/:cid/products", async (req, res) => {
     }
     const response = await fetch(url);
     const products = await response.json();
-    console.log("products list:", products);
     res.render("home", { products: products.response, cid });
   } catch (error) {
     console.error("Error al obtener productos:", error);
@@ -105,10 +101,8 @@ router.get("/:cid/products", async (req, res) => {
 router.get("/realTimeProducts", async (req, res) => {
   try {
     let url = "http://localhost:9000/api/products/all";
-    console.log(url);
     const response = await fetch(url);
     const products = await response.json();
-    console.log("carts:", products);
     res.render("realTimeProducts", { products: products.response });
   } catch (error) {
     console.error("Error al obtener carts:", error);
@@ -133,17 +127,11 @@ router.get("/carts", async (req, res) => {
 });
 
 router.get("/carts/:cid", async (req, res) => {
-  // const { cid } = req.query;
-  const cid = req.params.cid; // Obtenemos el valor de la página desde params
-  console.log("cid:", cid);
-
+  const cid = req.params.cid; 
   try {
-    console.log("cid2:", cid);
-
     let url = `http://localhost:9000/api/carts/${cid}`;
     const response = await fetch(url);
     const cart = await response.json();
-    console.log("cart:", cart);
     res.render("cart", { cart: cart.response });
   } catch (error) {
     console.error("Error al obtener productos:", error);

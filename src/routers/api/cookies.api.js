@@ -18,7 +18,6 @@ cookiesRouter.post("/create", (req, res, next) => {
 cookiesRouter.get("/read", (req, res, next) => {
   try {
     const cookies = req.cookies;
-    console.log(cookies);
     const message = "COOKIE LEIDA";
     return res.status(200).json({ message });
   } catch (error) {

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import envUtil from "./env.util.js";
-//import { readById } from "../dao/mongo/managers/users.manager.js";
 import dao from "../dao/factory.js";
 const{ UsersManager} = dao;
 
@@ -10,8 +9,6 @@ class CustomRouter {
     this._router = Router();
   }
   getRouter = () => this._router;
-  //applyCallbacks() depende de todos los middlewares que necesite ejecutar
-  //mapeamos los middlewares para que se ejecuten cada uno con req, res, next
   applyCallbacks = (callbacks) =>
     callbacks.map((cb) => async (req, res, next) => {
       try {
@@ -45,11 +42,7 @@ class CustomRouter {
         (policies.includes("USER") && role === "USER") ||
         (policies.includes("ADMIN") && role === "ADMIN")
       ) {
-        console.log(data);
-        console.log(user_id);
         const user = await UsersManager.readById(user_id);
-        console.log(user);
-
         if (!user) return res.json401();
         req.user = user;
         return next();

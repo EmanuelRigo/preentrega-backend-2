@@ -2,20 +2,14 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-// import {
-//   readByEmail,
-//   create,
-//   readById,
-//   update,
-// } from "../dao/mongo/managers/users.manager.js";
 import { createHashUtil } from "../utils/hash.util.js";
 import { verifyHashUtil } from "../utils/hash.util.js";
 import { createTokenUtil, verifyTokenUtil } from "../utils/token.util.js";
 import envUtil from "../utils/env.util.js";
 import dao from "../dao/factory.js";
-const { UsersManager } = dao;
-console.log("🚀 ~ UsersManager :", UsersManager )
 
+const { UsersManager } = dao;
+const { readByEmail, create, readById, update } = UsersManager;
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = envUtil;
 
@@ -29,7 +23,7 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const userExists = await UsersManager.readByEmail(email);
+        const userExists = await readByEmail(email);
         if (userExists) {
           const info = {
             message: "User already exists",
@@ -39,7 +33,7 @@ passport.use(
         }
         req.body.password = createHashUtil(password);
         const data = req.body;
-        const user = await UsersManager.create(data);
+        const user = await create(data);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -65,7 +59,7 @@ passport.use(
           return done(null, false, info);
         }
 
-        const user = await UsersManager.readByEmail(email);
+        const user = await readByEmail(email);
         if (!user) {
           const info = {
             message: "INVALID CREDENTIALS",
@@ -83,7 +77,7 @@ passport.use(
           return done(null, false, info);
         }
 
-        await UsersManager.update(user._id, { isOnline: true });
+        await update(user._id, { isOnline: true });
         const data = {
           user_id: user._id,
           role: user.role,
@@ -91,7 +85,6 @@ passport.use(
         };
         const token = createTokenUtil(data);
         req.token = token;
-        console.log("token:", req.token);
         return done(null, user);
       } catch (error) {
         console.error("Error durante el proceso de autenticación:", error);
@@ -110,7 +103,6 @@ passport.use(
     },
     async (data, done) => {
       try {
-        console.log("data desde passport admin:", data);
         const { user_id, role } = data;
         if (role !== "ADMIN") {
           const info = {
@@ -119,7 +111,7 @@ passport.use(
           };
           return done(null, false, info);
         }
-        const user = await UsersManager.readById(user_id);
+        const user = await readById(user_id);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -140,16 +132,15 @@ passport.use(
     async (req, accessToken, refreshToken, profile, done) => {
       try {
         const { id, picture } = profile;
-        let user = await UsersManager.readByEmail(id);
+        let user = await readByEmail(id);
         if (!user) {
-          user = await UsersManager.create({
+          user = await create({
             email: id,
             photo: picture,
             password: createHashUtil(id),
           });
         }
         req.token = createTokenUtil({ role: user.role, user: user._id });
-        console.log("token:", token);
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -167,9 +158,8 @@ passport.use(
     },
     async (data, done) => {
       try {
-        console.log("Signout data:", data);
         const { user_id } = data;
-        await UsersManager.update(user_id, { isOnline: false });
+        await update(user_id, { isOnline: false });
         return done(null, { user_id: null });
       } catch (error) {
         const info = {
@@ -192,9 +182,8 @@ passport.use(
     },
     async (data, done) => {
       try {
-        console.log("JWT payload:", data);
         const { user_id } = data;
-        const user = await UsersManager.readById(user_id);
+        const user = await readById(user_id);
         console.log("Usuario encontrado:", user);
 
         if (!user) {
@@ -238,7 +227,7 @@ passport.use(
       try {
         const token = req.token;
         const { user_id } = verifyTokenUtil(token);
-        const user = await UsersManager.readById(user_id);
+        const user = await readById(user_id);
         const { isOnline } = user;
         if (!isOnline) {
           const info = {
@@ -247,7 +236,6 @@ passport.use(
           };
           return done(null, false, info);
         }
-        console.log(user);
         return done(null, user);
       } catch (error) {
         const info = {

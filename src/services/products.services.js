@@ -1,19 +1,9 @@
-// import {
-//   create,
-//   getFiltered,
-//   getAll,
-//   update,
-//   destroy,
-//   readById,
-// } from "../dao/mongo/managers/product.manager.js";
-
+import ProductsDTO from "../dto/product.dto.js";
 import dao from "../dao/factory.js";
-console.log("🚀 ~ dao:", dao);
-
 const { ProductsManager } = dao;
-console.log("🚀 ~ productManager:", ProductsManager);
 
 async function createService(data) {
+  data = new ProductsDTO(data);
   const response = await ProductsManager.create(data);
   return response;
 }

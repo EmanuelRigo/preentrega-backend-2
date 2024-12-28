@@ -1,9 +1,6 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
-import passport from "../../middlewares/passport.mid.js";
-//import { readById } from "../../dao/mongo/managers/users.manager.js";
 import { verifyTokenUtil } from "../../utils/token.util.js";
 import passportCb from "../../middlewares/passportCb.mid.js";
-import { response } from "express";
 
 import dao from "../../dao/factory.js";
 const { UsersManager } = dao;
@@ -67,9 +64,6 @@ async function register(req, res, next) {
   const { _id } = req.user;
   const message = "User Registered";
   return res.json201(_id, message);
-  // return res
-  //   .status(201)
-  //   .json({ message: "USER REGISTERED", user, user_id: user._id });
 }
 
 async function login(req, res, next) {
@@ -89,7 +83,6 @@ function signout(req, res, next) {
 
 async function online(req, res, next) {
   const { token } = req.headers;
-  console.log(req.headers);
   const data = verifyTokenUtil(token);
   const one = await readById(data.user_id);
   if (one) {
@@ -113,18 +106,13 @@ async function onlineToken(req, res, next) {
 async function onlineToken2(req, res, next) {
   // Obtener el token del header de Authorization
   const authHeader = req.headers.authorization;
-  console.log("Authorization header:", authHeader);
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({
       message: "No token provided or invalid format",
       online: false,
     });
   }
-
   const token = authHeader.split(" ")[1];
-  console.log("Token extraído:", token);
-
   if (!token) {
     return res.status(401).json({
       message: "No token provided",
@@ -133,8 +121,6 @@ async function onlineToken2(req, res, next) {
   }
 
   const data = verifyTokenUtil(token);
-  console.log("Data del token:", data);
-
   const user = await readById(data.user_id);
   if (!user) {
     return res.status(404).json({

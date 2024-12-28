@@ -1,31 +1,24 @@
-// import {
-//   create,
-//   read,
-//   update,
-//   destroy,
-// } from "../dao/mongo/managers/users.manager.js";
-
+import UserDTO from "../dto/user.dto.js";
 import dao from "../dao/factory.js";
 
 const { UsersManager } = dao;
-console.log("🚀 ~ UsersManager:", UsersManager)
-
 
 async function createService(data) {
-  const response = await create(data);
+  data = new UserDTO(data);
+  const response = await UsersManager.create(data);
   return response;
 }
 
 async function readService(params) {
-  const response = await read();
+  const response = await UsersManager.read();
   return response;
 }
 
 async function updateService(id, data) {
-  const response = await update(id, data);
+  const response = await UsersManager.update(id, data);
   return response;
 }
 
-const destroyService = async (id) => await destroy(id);
+const destroyService = async (id) => await UsersManager.destroy(id);
 
 export { createService, readService, updateService, destroyService };
