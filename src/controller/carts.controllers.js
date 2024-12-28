@@ -13,7 +13,7 @@ import envUtil from "../utils/env.util.js";
 async function readCartController(req, res) {
   try {
     const id = req.params.cid;
-    const process = await readService(id);
+    const process = await readService({ _id: id });
     return res.status(200).send({ error: null, data: process });
   } catch (error) {
     console.log("Error al leer el carrito", error);
@@ -111,10 +111,29 @@ async function destroyProductsController(req, res) {
   res.status(200).send({ error: null, data: updatedCart });
 }
 
+async function destroyOneCartProductsController(req, res) {
+  const { cid, pid } = req.params;
+  const cart = await readOneService({ _id: cid });
+  if (!cart) {
+    return res.status(404).send({ error: "Carrito no encontrado" });
+  }
+  const updatedProducts = cart.products.filter(
+    (product) => product._id.toString() !== pid
+  );
+  const updatedCart = await updateCartService(
+    { _id: cid },
+    { products: updatedProducts },
+    { new: true }
+  );
+  res.status(200).send({ error: null, data: updatedCart });
+}
+
 export {
   readCartsController,
   readOneCartController,
   createCartController,
   updateCartController,
+  readCartController,
   destroyProductsController,
+  destroyOneCartProductsController
 };

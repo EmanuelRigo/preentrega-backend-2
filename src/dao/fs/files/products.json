@@ -1,0 +1,902 @@
+[
+    {
+        "title": "Silla Gamer X1",
+        "description": "Silla ergonómica para largas sesiones de juego.",
+        "code": "SGX1001",
+        "price": 250,
+        "status": true,
+        "stock": 10,
+        "category": "muebles"
+    },
+    {
+        "title": "Teclado Mecánico RGB",
+        "description": "Teclado con retroiluminación RGB para gaming extremo.",
+        "code": "TMG1012",
+        "price": 80,
+        "status": false,
+        "stock": 15,
+        "category": "accesorios"
+    },
+    {
+        "title": "Monitor 4K Ultra HD",
+        "description": "Monitor 4K para gráficos nítidos y claros.",
+        "code": "M4K2005",
+        "price": 500,
+        "status": true,
+        "stock": 8,
+        "category": "electrónica"
+    },
+    {
+        "title": "Cámara Web HD",
+        "description": "Cámara HD para videollamadas con buena calidad.",
+        "code": "CWH3030",
+        "price": 60,
+        "status": false,
+        "stock": 20,
+        "category": "oficina"
+    },
+    {
+        "title": "Alfombrilla Gaming XL",
+        "description": "Alfombrilla antideslizante para ratón y teclado.",
+        "code": "AGX1042",
+        "price": 25,
+        "status": true,
+        "stock": 50,
+        "category": "accesorios"
+    },
+    {
+        "title": "Auriculares Inalámbricos",
+        "description": "Auriculares de alta calidad para música y llamadas.",
+        "code": "AUI2009",
+        "price": 120,
+        "status": true,
+        "stock": 12,
+        "category": "electrónica"
+    },
+    {
+        "title": "Silla de Oficina Confort",
+        "description": "Silla cómoda para largas horas en oficina.",
+        "code": "SOF1015",
+        "price": 180,
+        "status": true,
+        "stock": 7,
+        "category": "muebles"
+    },
+    {
+        "title": "Escritorio Gamer LED",
+        "description": "Escritorio amplio con iluminación LED integrada.",
+        "code": "EGG1020",
+        "price": 220,
+        "status": false,
+        "stock": 5,
+        "category": "muebles"
+    },
+    {
+        "title": "Mouse Gamer Pro",
+        "description": "Ratón ergonómico con sensor de alta precisión.",
+        "code": "MGP3035",
+        "price": 40,
+        "status": true,
+        "stock": 25,
+        "category": "accesorios"
+    },
+    {
+        "title": "Impresora Multifuncional Wi-Fi",
+        "description": "Impresora inalámbrica para casa y oficina profesional.",
+        "code": "IMW5050",
+        "price": 150,
+        "status": false,
+        "stock": 3,
+        "category": "oficina"
+    },
+    {
+        "title": "Mesa de Centro Modelo 1",
+        "description": "Mesa de Centro para uso diario y eficiente.",
+        "code": "CODE1000",
+        "price": 35,
+        "status": false,
+        "stock": 3,
+        "category": "muebles"
+    },
+    {
+        "title": "Lámpara de Escritorio Modelo 2",
+        "description": "Lámpara de Escritorio para uso diario y eficiente.",
+        "code": "CODE1001",
+        "price": 40,
+        "status": true,
+        "stock": 5,
+        "category": "accesorios"
+    },
+    {
+        "title": "Organizador de Documentos Modelo 3",
+        "description": "Organizador de Documentos para uso diario y eficiente.",
+        "code": "CODE1002",
+        "price": 45,
+        "status": true,
+        "stock": 7,
+        "category": "electrónica"
+    },
+    {
+        "title": "Audífonos Bluetooth Modelo 4",
+        "description": "Audífonos Bluetooth para uso diario y eficiente.",
+        "code": "CODE1003",
+        "price": 50,
+        "status": false,
+        "stock": 9,
+        "category": "oficina"
+    },
+    {
+        "title": "Reloj Deportivo Modelo 5",
+        "description": "Reloj Deportivo para uso diario y eficiente.",
+        "code": "CODE1004",
+        "price": 55,
+        "status": true,
+        "stock": 11,
+        "category": "deportes"
+    },
+    {
+        "title": "Bicicleta Montaña Modelo 6",
+        "description": "Bicicleta Montaña para uso diario y eficiente.",
+        "code": "CODE1005",
+        "price": 60,
+        "status": true,
+        "stock": 13,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla de Jardín Modelo 7",
+        "description": "Silla de Jardín para uso diario y eficiente.",
+        "code": "CODE1006",
+        "price": 65,
+        "status": false,
+        "stock": 15,
+        "category": "accesorios"
+    },
+    {
+        "title": "Gabinete de Oficina Modelo 8",
+        "description": "Gabinete de Oficina para uso diario y eficiente.",
+        "code": "CODE1007",
+        "price": 70,
+        "status": true,
+        "stock": 17,
+        "category": "electrónica"
+    },
+    {
+        "title": "Tablet Android Modelo 9",
+        "description": "Tablet Android para uso diario y eficiente.",
+        "code": "CODE1008",
+        "price": 75,
+        "status": true,
+        "stock": 19,
+        "category": "oficina"
+    },
+    {
+        "title": "Auriculares con Cancelación Modelo 10",
+        "description": "Auriculares con Cancelación para uso diario y eficiente.",
+        "code": "CODE1009",
+        "price": 80,
+        "status": false,
+        "stock": 21,
+        "category": "deportes"
+    },
+    {
+        "title": "Caja Organizadora Modelo 11",
+        "description": "Caja Organizadora para uso diario y eficiente.",
+        "code": "CODE1010",
+        "price": 85,
+        "status": true,
+        "stock": 23,
+        "category": "muebles"
+    },
+    {
+        "title": "Control Remoto Universal Modelo 12",
+        "description": "Control Remoto Universal para uso diario y eficiente.",
+        "code": "CODE1011",
+        "price": 90,
+        "status": true,
+        "stock": 25,
+        "category": "accesorios"
+    },
+    {
+        "title": "Cámara IP de Seguridad Modelo 13",
+        "description": "Cámara IP de Seguridad para uso diario y eficiente.",
+        "code": "CODE1012",
+        "price": 95,
+        "status": false,
+        "stock": 27,
+        "category": "electrónica"
+    },
+    {
+        "title": "Archivador Metálico Modelo 14",
+        "description": "Archivador Metálico para uso diario y eficiente.",
+        "code": "CODE1013",
+        "price": 100,
+        "status": true,
+        "stock": 29,
+        "category": "oficina"
+    },
+    {
+        "title": "Parlantes Bluetooth Modelo 15",
+        "description": "Parlantes Bluetooth para uso diario y eficiente.",
+        "code": "CODE1014",
+        "price": 105,
+        "status": true,
+        "stock": 31,
+        "category": "deportes"
+    },
+    {
+        "title": "Lámpara de Lectura Modelo 16",
+        "description": "Lámpara de Lectura para uso diario y eficiente.",
+        "code": "CODE1015",
+        "price": 110,
+        "status": false,
+        "stock": 33,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla Plegable Modelo 17",
+        "description": "Silla Plegable para uso diario y eficiente.",
+        "code": "CODE1016",
+        "price": 115,
+        "status": true,
+        "stock": 35,
+        "category": "accesorios"
+    },
+    {
+        "title": "Router Wi-Fi 6 Modelo 18",
+        "description": "Router Wi-Fi 6 para uso diario y eficiente.",
+        "code": "CODE1017",
+        "price": 120,
+        "status": true,
+        "stock": 37,
+        "category": "electrónica"
+    },
+    {
+        "title": "Batería Recargable Modelo 19",
+        "description": "Batería Recargable para uso diario y eficiente.",
+        "code": "CODE1018",
+        "price": 125,
+        "status": false,
+        "stock": 39,
+        "category": "oficina"
+    },
+    {
+        "title": "Cargador Rápido USB Modelo 20",
+        "description": "Cargador Rápido USB para uso diario y eficiente.",
+        "code": "CODE1019",
+        "price": 130,
+        "status": true,
+        "stock": 41,
+        "category": "deportes"
+    },
+    {
+        "title": "Mesa de Centro Modelo 21",
+        "description": "Mesa de Centro para uso diario y eficiente.",
+        "code": "CODE1020",
+        "price": 135,
+        "status": true,
+        "stock": 43,
+        "category": "muebles"
+    },
+    {
+        "title": "Lámpara de Escritorio Modelo 22",
+        "description": "Lámpara de Escritorio para uso diario y eficiente.",
+        "code": "CODE1021",
+        "price": 140,
+        "status": false,
+        "stock": 45,
+        "category": "accesorios"
+    },
+    {
+        "title": "Organizador de Documentos Modelo 23",
+        "description": "Organizador de Documentos para uso diario y eficiente.",
+        "code": "CODE1022",
+        "price": 145,
+        "status": true,
+        "stock": 47,
+        "category": "electrónica"
+    },
+    {
+        "title": "Audífonos Bluetooth Modelo 24",
+        "description": "Audífonos Bluetooth para uso diario y eficiente.",
+        "code": "CODE1023",
+        "price": 150,
+        "status": true,
+        "stock": 49,
+        "category": "oficina"
+    },
+    {
+        "title": "Reloj Deportivo Modelo 25",
+        "description": "Reloj Deportivo para uso diario y eficiente.",
+        "code": "CODE1024",
+        "price": 155,
+        "status": false,
+        "stock": 1,
+        "category": "deportes"
+    },
+    {
+        "title": "Bicicleta Montaña Modelo 26",
+        "description": "Bicicleta Montaña para uso diario y eficiente.",
+        "code": "CODE1025",
+        "price": 160,
+        "status": true,
+        "stock": 3,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla de Jardín Modelo 27",
+        "description": "Silla de Jardín para uso diario y eficiente.",
+        "code": "CODE1026",
+        "price": 165,
+        "status": true,
+        "stock": 5,
+        "category": "accesorios"
+    },
+    {
+        "title": "Gabinete de Oficina Modelo 28",
+        "description": "Gabinete de Oficina para uso diario y eficiente.",
+        "code": "CODE1027",
+        "price": 170,
+        "status": false,
+        "stock": 7,
+        "category": "electrónica"
+    },
+    {
+        "title": "Tablet Android Modelo 29",
+        "description": "Tablet Android para uso diario y eficiente.",
+        "code": "CODE1028",
+        "price": 175,
+        "status": true,
+        "stock": 9,
+        "category": "oficina"
+    },
+    {
+        "title": "Auriculares con Cancelación Modelo 30",
+        "description": "Auriculares con Cancelación para uso diario y eficiente.",
+        "code": "CODE1029",
+        "price": 180,
+        "status": true,
+        "stock": 11,
+        "category": "deportes"
+    },
+    {
+        "title": "Caja Organizadora Modelo 31",
+        "description": "Caja Organizadora para uso diario y eficiente.",
+        "code": "CODE1030",
+        "price": 185,
+        "status": false,
+        "stock": 13,
+        "category": "muebles"
+    },
+    {
+        "title": "Control Remoto Universal Modelo 32",
+        "description": "Control Remoto Universal para uso diario y eficiente.",
+        "code": "CODE1031",
+        "price": 190,
+        "status": true,
+        "stock": 15,
+        "category": "accesorios"
+    },
+    {
+        "title": "Cámara IP de Seguridad Modelo 33",
+        "description": "Cámara IP de Seguridad para uso diario y eficiente.",
+        "code": "CODE1032",
+        "price": 195,
+        "status": true,
+        "stock": 17,
+        "category": "electrónica"
+    },
+    {
+        "title": "Archivador Metálico Modelo 34",
+        "description": "Archivador Metálico para uso diario y eficiente.",
+        "code": "CODE1033",
+        "price": 200,
+        "status": false,
+        "stock": 19,
+        "category": "oficina"
+    },
+    {
+        "title": "Parlantes Bluetooth Modelo 35",
+        "description": "Parlantes Bluetooth para uso diario y eficiente.",
+        "code": "CODE1034",
+        "price": 205,
+        "status": true,
+        "stock": 21,
+        "category": "deportes"
+    },
+    {
+        "title": "Lámpara de Lectura Modelo 36",
+        "description": "Lámpara de Lectura para uso diario y eficiente.",
+        "code": "CODE1035",
+        "price": 210,
+        "status": true,
+        "stock": 23,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla Plegable Modelo 37",
+        "description": "Silla Plegable para uso diario y eficiente.",
+        "code": "CODE1036",
+        "price": 215,
+        "status": false,
+        "stock": 25,
+        "category": "accesorios"
+    },
+    {
+        "title": "Router Wi-Fi 6 Modelo 38",
+        "description": "Router Wi-Fi 6 para uso diario y eficiente.",
+        "code": "CODE1037",
+        "price": 220,
+        "status": true,
+        "stock": 27,
+        "category": "electrónica"
+    },
+    {
+        "title": "Batería Recargable Modelo 39",
+        "description": "Batería Recargable para uso diario y eficiente.",
+        "code": "CODE1038",
+        "price": 225,
+        "status": true,
+        "stock": 29,
+        "category": "oficina"
+    },
+    {
+        "title": "Cargador Rápido USB Modelo 40",
+        "description": "Cargador Rápido USB para uso diario y eficiente.",
+        "code": "CODE1039",
+        "price": 230,
+        "status": false,
+        "stock": 31,
+        "category": "deportes"
+    },
+    {
+        "title": "Mesa de Centro Modelo 41",
+        "description": "Mesa de Centro para uso diario y eficiente.",
+        "code": "CODE1040",
+        "price": 235,
+        "status": true,
+        "stock": 33,
+        "category": "muebles"
+    },
+    {
+        "title": "Lámpara de Escritorio Modelo 42",
+        "description": "Lámpara de Escritorio para uso diario y eficiente.",
+        "code": "CODE1041",
+        "price": 240,
+        "status": true,
+        "stock": 35,
+        "category": "accesorios"
+    },
+    {
+        "title": "Organizador de Documentos Modelo 43",
+        "description": "Organizador de Documentos para uso diario y eficiente.",
+        "code": "CODE1042",
+        "price": 245,
+        "status": false,
+        "stock": 37,
+        "category": "electrónica"
+    },
+    {
+        "title": "Audífonos Bluetooth Modelo 44",
+        "description": "Audífonos Bluetooth para uso diario y eficiente.",
+        "code": "CODE1043",
+        "price": 250,
+        "status": true,
+        "stock": 39,
+        "category": "oficina"
+    },
+    {
+        "title": "Reloj Deportivo Modelo 45",
+        "description": "Reloj Deportivo para uso diario y eficiente.",
+        "code": "CODE1044",
+        "price": 255,
+        "status": true,
+        "stock": 41,
+        "category": "deportes"
+    },
+    {
+        "title": "Bicicleta Montaña Modelo 46",
+        "description": "Bicicleta Montaña para uso diario y eficiente.",
+        "code": "CODE1045",
+        "price": 260,
+        "status": false,
+        "stock": 43,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla de Jardín Modelo 47",
+        "description": "Silla de Jardín para uso diario y eficiente.",
+        "code": "CODE1046",
+        "price": 265,
+        "status": true,
+        "stock": 45,
+        "category": "accesorios"
+    },
+    {
+        "title": "Gabinete de Oficina Modelo 48",
+        "description": "Gabinete de Oficina para uso diario y eficiente.",
+        "code": "CODE1047",
+        "price": 270,
+        "status": true,
+        "stock": 47,
+        "category": "electrónica"
+    },
+    {
+        "title": "Tablet Android Modelo 49",
+        "description": "Tablet Android para uso diario y eficiente.",
+        "code": "CODE1048",
+        "price": 275,
+        "status": false,
+        "stock": 49,
+        "category": "oficina"
+    },
+    {
+        "title": "Auriculares con Cancelación Modelo 50",
+        "description": "Auriculares con Cancelación para uso diario y eficiente.",
+        "code": "CODE1049",
+        "price": 280,
+        "status": true,
+        "stock": 1,
+        "category": "deportes"
+    },
+    {
+        "title": "Caja Organizadora Modelo 51",
+        "description": "Caja Organizadora para uso diario y eficiente.",
+        "code": "CODE1050",
+        "price": 285,
+        "status": true,
+        "stock": 3,
+        "category": "muebles"
+    },
+    {
+        "title": "Control Remoto Universal Modelo 52",
+        "description": "Control Remoto Universal para uso diario y eficiente.",
+        "code": "CODE1051",
+        "price": 290,
+        "status": false,
+        "stock": 5,
+        "category": "accesorios"
+    },
+    {
+        "title": "Cámara IP de Seguridad Modelo 53",
+        "description": "Cámara IP de Seguridad para uso diario y eficiente.",
+        "code": "CODE1052",
+        "price": 295,
+        "status": true,
+        "stock": 7,
+        "category": "electrónica"
+    },
+    {
+        "title": "Archivador Metálico Modelo 54",
+        "description": "Archivador Metálico para uso diario y eficiente.",
+        "code": "CODE1053",
+        "price": 300,
+        "status": true,
+        "stock": 9,
+        "category": "oficina"
+    },
+    {
+        "title": "Parlantes Bluetooth Modelo 55",
+        "description": "Parlantes Bluetooth para uso diario y eficiente.",
+        "code": "CODE1054",
+        "price": 305,
+        "status": false,
+        "stock": 11,
+        "category": "deportes"
+    },
+    {
+        "title": "Lámpara de Lectura Modelo 56",
+        "description": "Lámpara de Lectura para uso diario y eficiente.",
+        "code": "CODE1055",
+        "price": 310,
+        "status": true,
+        "stock": 13,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla Plegable Modelo 57",
+        "description": "Silla Plegable para uso diario y eficiente.",
+        "code": "CODE1056",
+        "price": 315,
+        "status": true,
+        "stock": 15,
+        "category": "accesorios"
+    },
+    {
+        "title": "Router Wi-Fi 6 Modelo 58",
+        "description": "Router Wi-Fi 6 para uso diario y eficiente.",
+        "code": "CODE1057",
+        "price": 320,
+        "status": false,
+        "stock": 17,
+        "category": "electrónica"
+    },
+    {
+        "title": "Batería Recargable Modelo 59",
+        "description": "Batería Recargable para uso diario y eficiente.",
+        "code": "CODE1058",
+        "price": 325,
+        "status": true,
+        "stock": 19,
+        "category": "oficina"
+    },
+    {
+        "title": "Cargador Rápido USB Modelo 60",
+        "description": "Cargador Rápido USB para uso diario y eficiente.",
+        "code": "CODE1059",
+        "price": 330,
+        "status": true,
+        "stock": 21,
+        "category": "deportes"
+    },
+    {
+        "title": "Mesa de Centro Modelo 61",
+        "description": "Mesa de Centro para uso diario y eficiente.",
+        "code": "CODE1060",
+        "price": 335,
+        "status": false,
+        "stock": 23,
+        "category": "muebles"
+    },
+    {
+        "title": "Lámpara de Escritorio Modelo 62",
+        "description": "Lámpara de Escritorio para uso diario y eficiente.",
+        "code": "CODE1061",
+        "price": 340,
+        "status": true,
+        "stock": 25,
+        "category": "accesorios"
+    },
+    {
+        "title": "Organizador de Documentos Modelo 63",
+        "description": "Organizador de Documentos para uso diario y eficiente.",
+        "code": "CODE1062",
+        "price": 345,
+        "status": true,
+        "stock": 27,
+        "category": "electrónica"
+    },
+    {
+        "title": "Audífonos Bluetooth Modelo 64",
+        "description": "Audífonos Bluetooth para uso diario y eficiente.",
+        "code": "CODE1063",
+        "price": 350,
+        "status": false,
+        "stock": 29,
+        "category": "oficina"
+    },
+    {
+        "title": "Reloj Deportivo Modelo 65",
+        "description": "Reloj Deportivo para uso diario y eficiente.",
+        "code": "CODE1064",
+        "price": 355,
+        "status": true,
+        "stock": 31,
+        "category": "deportes"
+    },
+    {
+        "title": "Bicicleta Montaña Modelo 66",
+        "description": "Bicicleta Montaña para uso diario y eficiente.",
+        "code": "CODE1065",
+        "price": 360,
+        "status": true,
+        "stock": 33,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla de Jardín Modelo 67",
+        "description": "Silla de Jardín para uso diario y eficiente.",
+        "code": "CODE1066",
+        "price": 365,
+        "status": false,
+        "stock": 35,
+        "category": "accesorios"
+    },
+    {
+        "title": "Gabinete de Oficina Modelo 68",
+        "description": "Gabinete de Oficina para uso diario y eficiente.",
+        "code": "CODE1067",
+        "price": 370,
+        "status": true,
+        "stock": 37,
+        "category": "electrónica"
+    },
+    {
+        "title": "Tablet Android Modelo 69",
+        "description": "Tablet Android para uso diario y eficiente.",
+        "code": "CODE1068",
+        "price": 375,
+        "status": true,
+        "stock": 39,
+        "category": "oficina"
+    },
+    {
+        "title": "Auriculares con Cancelación Modelo 70",
+        "description": "Auriculares con Cancelación para uso diario y eficiente.",
+        "code": "CODE1069",
+        "price": 380,
+        "status": false,
+        "stock": 41,
+        "category": "deportes"
+    },
+    {
+        "title": "Caja Organizadora Modelo 71",
+        "description": "Caja Organizadora para uso diario y eficiente.",
+        "code": "CODE1070",
+        "price": 385,
+        "status": true,
+        "stock": 43,
+        "category": "muebles"
+    },
+    {
+        "title": "Control Remoto Universal Modelo 72",
+        "description": "Control Remoto Universal para uso diario y eficiente.",
+        "code": "CODE1071",
+        "price": 390,
+        "status": true,
+        "stock": 45,
+        "category": "accesorios"
+    },
+    {
+        "title": "Cámara IP de Seguridad Modelo 73",
+        "description": "Cámara IP de Seguridad para uso diario y eficiente.",
+        "code": "CODE1072",
+        "price": 395,
+        "status": false,
+        "stock": 47,
+        "category": "electrónica"
+    },
+    {
+        "title": "Archivador Metálico Modelo 74",
+        "description": "Archivador Metálico para uso diario y eficiente.",
+        "code": "CODE1073",
+        "price": 400,
+        "status": true,
+        "stock": 49,
+        "category": "oficina"
+    },
+    {
+        "title": "Parlantes Bluetooth Modelo 75",
+        "description": "Parlantes Bluetooth para uso diario y eficiente.",
+        "code": "CODE1074",
+        "price": 405,
+        "status": true,
+        "stock": 1,
+        "category": "deportes"
+    },
+    {
+        "title": "Lámpara de Lectura Modelo 76",
+        "description": "Lámpara de Lectura para uso diario y eficiente.",
+        "code": "CODE1075",
+        "price": 410,
+        "status": false,
+        "stock": 3,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla Plegable Modelo 77",
+        "description": "Silla Plegable para uso diario y eficiente.",
+        "code": "CODE1076",
+        "price": 415,
+        "status": true,
+        "stock": 5,
+        "category": "accesorios"
+    },
+    {
+        "title": "Router Wi-Fi 6 Modelo 78",
+        "description": "Router Wi-Fi 6 para uso diario y eficiente.",
+        "code": "CODE1077",
+        "price": 420,
+        "status": true,
+        "stock": 7,
+        "category": "electrónica"
+    },
+    {
+        "title": "Batería Recargable Modelo 79",
+        "description": "Batería Recargable para uso diario y eficiente.",
+        "code": "CODE1078",
+        "price": 425,
+        "status": false,
+        "stock": 9,
+        "category": "oficina"
+    },
+    {
+        "title": "Cargador Rápido USB Modelo 80",
+        "description": "Cargador Rápido USB para uso diario y eficiente.",
+        "code": "CODE1079",
+        "price": 430,
+        "status": true,
+        "stock": 11,
+        "category": "deportes"
+    },
+    {
+        "title": "Mesa de Centro Modelo 81",
+        "description": "Mesa de Centro para uso diario y eficiente.",
+        "code": "CODE1080",
+        "price": 435,
+        "status": true,
+        "stock": 13,
+        "category": "muebles"
+    },
+    {
+        "title": "Lámpara de Escritorio Modelo 82",
+        "description": "Lámpara de Escritorio para uso diario y eficiente.",
+        "code": "CODE1081",
+        "price": 440,
+        "status": false,
+        "stock": 15,
+        "category": "accesorios"
+    },
+    {
+        "title": "Organizador de Documentos Modelo 83",
+        "description": "Organizador de Documentos para uso diario y eficiente.",
+        "code": "CODE1082",
+        "price": 445,
+        "status": true,
+        "stock": 17,
+        "category": "electrónica"
+    },
+    {
+        "title": "Audífonos Bluetooth Modelo 84",
+        "description": "Audífonos Bluetooth para uso diario y eficiente.",
+        "code": "CODE1083",
+        "price": 450,
+        "status": true,
+        "stock": 19,
+        "category": "oficina"
+    },
+    {
+        "title": "Reloj Deportivo Modelo 85",
+        "description": "Reloj Deportivo para uso diario y eficiente.",
+        "code": "CODE1084",
+        "price": 455,
+        "status": false,
+        "stock": 21,
+        "category": "deportes"
+    },
+    {
+        "title": "Bicicleta Montaña Modelo 86",
+        "description": "Bicicleta Montaña para uso diario y eficiente.",
+        "code": "CODE1085",
+        "price": 460,
+        "status": true,
+        "stock": 23,
+        "category": "muebles"
+    },
+    {
+        "title": "Silla de Jardín Modelo 87",
+        "description": "Silla de Jardín para uso diario y eficiente.",
+        "code": "CODE1086",
+        "price": 465,
+        "status": true,
+        "stock": 25,
+        "category": "accesorios"
+    },
+    {
+        "title": "Gabinete de Oficina Modelo 88",
+        "description": "Gabinete de Oficina para uso diario y eficiente.",
+        "code": "CODE1087",
+        "price": 470,
+        "status": false,
+        "stock": 27,
+        "category": "electrónica"
+    },
+    {
+        "title": "Tablet Android Modelo 89",
+        "description": "Tablet Android para uso diario y eficiente.",
+        "code": "CODE1088",
+        "price": 475,
+        "status": true,
+        "stock": 29,
+        "category": "oficina"
+    },
+    {
+        "title": "Auriculares con Cancelación Modelo 90",
+        "description": "Auriculares con Cancelación para uso diario y eficiente.",
+        "code": "CODE1089",
+        "price": 480,
+        "status": true,
+        "stock": 31,
+        "category": "deportes"
+    }
+]

@@ -347,3 +347,5 @@ Se ha atomizado el código en **services** y **controllers** para mejorar la mod
 
 
 agregando persistencia segun corresponda en FS o MongoDb
+
+agregamos DTO a users.service, products.service y carts.service para transormar los objetos segun la persistencia requerida 

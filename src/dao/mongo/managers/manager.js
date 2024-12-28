@@ -88,7 +88,7 @@ class Manager {
         .findOne(data)
         .populate("products._id")
         .lean();
-
+  
       console.log("Cart with populated products:", cart);
       return cart;
     } catch (err) {

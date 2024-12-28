@@ -132,7 +132,9 @@ router.get("/carts/:cid", async (req, res) => {
     let url = `http://localhost:9000/api/carts/${cid}`;
     const response = await fetch(url);
     const cart = await response.json();
-    res.render("cart", { cart: cart.response });
+    console.log("🚀 ~ router.get ~ cart:", cart)
+    
+    res.render("cart", { cart: cart.data });
   } catch (error) {
     console.error("Error al obtener productos:", error);
     res

@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
     },
     products: [
       {
-        product_id: {
+       _id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: envUtil.PRODUCTS_COLLECTION,
           required: true,

@@ -2,10 +2,11 @@
 import CartDTO from "../dto/cart.dto.js";
 import dao from "../dao/factory.js";
 const { CartsManager } = dao;
+console.log("🚀 ~ CartsManager :", CartsManager )
 
 
 async function readService(data) {
-  const response = await CartsManager.read(data);
+  const response = await CartsManager.readByIdPopulate(data);
   return response;
 }
 
