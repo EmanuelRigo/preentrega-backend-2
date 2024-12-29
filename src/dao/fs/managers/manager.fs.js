@@ -9,26 +9,51 @@ class ManagerFS {
   async _readFile() {
     try {
       const data = await fs.readFile(this.filePath, 'utf-8');
+      console.log("Contenido del archivo JSON:", data); // Log para ver el contenido del archivo
       return JSON.parse(data);
     } catch (err) {
       if (err.code === 'ENOENT') {
+        console.log("Archivo no encontrado, devolviendo array vacío."); // Log para archivo no encontrado
         return [];
       }
+      console.error("Error al leer el archivo:", err); // Log para cualquier otro error
       throw err;
+    }
+  }
+
+  async _readFileForEmail() {
+    try {
+      const data = await fs.readFile(this.filePath, 'utf-8');
+      console.log("Contenido del archivo JSON para email:", data); // Log para ver el contenido del archivo
+      return { docs: JSON.parse(data), error: null };
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        console.log("Archivo no encontrado, devolviendo objeto vacío."); // Log para archivo no encontrado
+        return { docs: [], error: null };
+      } else if (err instanceof SyntaxError) {
+        console.error("Formato JSON inválido:", err); // Log para error de formato JSON
+        return { docs: [], error: 'Invalid JSON format' };
+      }
+      console.error("Error al leer el archivo:", err); // Log para cualquier otro error
+      return { docs: [], error: err.message };
     }
   }
 
   async _writeFile(data) {
     try {
+      console.log("Escribiendo datos en el archivo JSON:", JSON.stringify(data, null, 2)); // Log para ver los datos que se están escribiendo
       await fs.writeFile(this.filePath, JSON.stringify(data, null, 2));
+      console.log("Archivo JSON escrito con éxito."); // Log para escritura exitosa
     } catch (err) {
+      console.error("Error al escribir el archivo:", err); // Log para error de escritura
       throw err;
     }
   }
 
   getAll = async () => {
     try {
-      return await this._readFile();
+      const docs = await this._readFile();
+      return docs;
     } catch (err) {
       return err.message;
     }
@@ -37,11 +62,12 @@ class ManagerFS {
   getFiltered = async (options) => {
     try {
       const { limit, page, sort, filter } = options;
-      const data = await this._readFile();
+      const docs = await this._readFile();
+      console.log("🚀 ~ ManagerFS ~ getFiltered= ~ docs :", docs );
 
-      let filteredData = data;
+      let filteredData = docs;
       if (filter) {
-        filteredData = data.filter(item => {
+        filteredData = docs.filter(item => {
           return Object.keys(filter).every(key => item[key] === filter[key]);
         });
       }
@@ -55,18 +81,31 @@ class ManagerFS {
 
       const start = (page - 1) * limit;
       const end = page * limit;
-      return filteredData.slice(start, end);
+      const paginatedData = filteredData.slice(start, end);
+
+      return {
+        docs: paginatedData,
+        totalDocs: filteredData.length,
+        limit,
+        totalPages: Math.ceil(filteredData.length / limit),
+        page,
+        pagingCounter: start + 1,
+        hasPrevPage: page > 1,
+        hasNextPage: end < filteredData.length,
+        prevPage: page > 1 ? page - 1 : null,
+        nextPage: end < filteredData.length ? page + 1 : null
+      };
     } catch (err) {
       console.error("Error en getFiltered:", err);
-      return err.message;
+      return { docs: [], error: err.message };
     }
   };
 
   create = async (data) => {
     try {
-      const allData = await this._readFile();
-      allData.push(data);
-      await this._writeFile(allData);
+      const docs = await this._readFile();
+      docs.push(data);
+      await this._writeFile(docs);
       return data;
     } catch (error) {
       throw error;
@@ -77,19 +116,32 @@ class ManagerFS {
     try {
       const page = pg || 1;
       const limit = 10;
-      const data = await this._readFile();
+      const docs = await this._readFile();
       const start = (page - 1) * limit;
       const end = page * limit;
-      return data.slice(start, end);
+      const paginatedData = docs.slice(start, end);
+
+      return {
+        docs: paginatedData,
+        totalDocs: docs.length,
+        limit,
+        totalPages: Math.ceil(docs.length / limit),
+        page,
+        pagingCounter: start + 1,
+        hasPrevPage: page > 1,
+        hasNextPage: end < docs.length,
+        prevPage: page > 1 ? page - 1 : null,
+        nextPage: end < docs.length ? page + 1 : null
+      };
     } catch (err) {
-      return err.message;
+      return { docs: [], error: err.message };
     }
   };
 
   read = async (filter) => {
     try {
-      const data = await this._readFile();
-      return data.filter(item => {
+      const docs = await this._readFile();
+      return docs.filter(item => {
         return Object.keys(filter).every(key => item[key] === filter[key]);
       });
     } catch (error) {
@@ -99,8 +151,9 @@ class ManagerFS {
 
   readByEmail = async (email) => {
     try {
-      const data = await this._readFile();
-      return data.find(item => item.email === email);
+      const { docs, error } = await this._readFileForEmail();
+      if (error) throw new Error(error);
+      return docs.find(item => item.email === email);
     } catch (error) {
       throw error;
     }
@@ -108,8 +161,8 @@ class ManagerFS {
 
   readById = async (id) => {
     try {
-      const data = await this._readFile();
-      return data.find(item => item._id === id);
+      const docs = await this._readFile();
+      return docs.find(item => item._id === id);
     } catch (error) {
       throw error;
     }
@@ -117,8 +170,8 @@ class ManagerFS {
 
   readByIdPopulate = async (id) => {
     try {
-      const data = await this._readFile();
-      const cart = data.find(item => item._id === id);
+      const docs = await this._readFile();
+      const cart = docs.find(item => item._id === id);
       if (cart) {
         // Simulate population
         cart.products = cart.products.map(product => {
@@ -134,13 +187,13 @@ class ManagerFS {
 
   addProduct = async (data) => {
     try {
-      const allData = await this._readFile();
-      const index = allData.findIndex(item => item._id === data._id);
+      const docs = await this._readFile();
+      const index = docs.findIndex(item => item._id === data._id);
       if (index !== -1) {
-        allData[index].products = data.products;
-        allData[index].updatedAt = new Date();
-        await this._writeFile(allData);
-        return allData[index];
+        docs[index].products = data.products;
+        docs[index].updatedAt = new Date();
+        await this._writeFile(docs);
+        return docs[index];
       }
       return null;
     } catch (err) {
@@ -150,12 +203,12 @@ class ManagerFS {
 
   update = async (id, data) => {
     try {
-      const allData = await this._readFile();
-      const index = allData.findIndex(item => item._id === id);
+      const docs = await this._readFile();
+      const index = docs.findIndex(item => item._id === id);
       if (index !== -1) {
-        allData[index] = { ...allData[index], ...data };
-        await this._writeFile(allData);
-        return allData[index];
+        docs[index] = { ...docs[index], ...data };
+        await this._writeFile(docs);
+        return docs[index];
       }
       return null;
     } catch (error) {
@@ -165,11 +218,11 @@ class ManagerFS {
 
   destroy = async (id) => {
     try {
-      const allData = await this._readFile();
-      const index = allData.findIndex(item => item._id === id);
+      const docs = await this._readFile();
+      const index = docs.findIndex(item => item._id === id);
       if (index !== -1) {
-        const [deletedItem] = allData.splice(index, 1);
-        await this._writeFile(allData);
+        const [deletedItem] = docs.splice(index, 1);
+        await this._writeFile(docs);
         return deletedItem;
       }
       return null;
