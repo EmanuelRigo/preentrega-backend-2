@@ -28,7 +28,7 @@ class ProductsApiRouter extends CustomRouter {
 
     this.read("/:pid", ["PUBLIC"], readOneProductController);
 
-    this.read("/paginated/:pg", ["PUBLIC"], readProductsController);
+    this.read("/paginated/:page", ["PUBLIC"], readProductsController);
 
     this.update(
       "/:id",

@@ -1,0 +1,50 @@
+[
+  {
+    "_id": {
+      "$oid": "6771d844a531059c0e4cf736"
+    },
+    "name": "jose",
+    "email": "joseadmin@coder.com",
+    "password": "$2b$10$9CxixV9h6sRSrguQZTihm.eR/uHnNSSB1xmRNgztNPtnKqQMAI2Gq",
+    "role": "ADMIN",
+    "verifyUser": false,
+    "verifyCode": "1234",
+    "isOnline": true,
+    "__v": {
+      "$numberInt": "0"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6771d844a531059c0e4cf737"
+    },
+    "name": "maria",
+    "email": "mariaadmin@coder.com",
+    "password": "$2b$10$9CxixV9h6sRSrguQZTihm.eR/uHnNSSB1xmRNgztNPtnKqQMAI2Gq",
+    "role": "ADMIN",
+    "verifyUser": true,
+    "verifyCode": "5678",
+    "isOnline": false,
+    "__v": {
+      "$numberInt": "1"
+    }
+  },
+  {
+    "name": "jose2",
+    "email": "joseadmin2@coder.com",
+    "password": "$2b$10$23iq.T3hbMm7XTRK68z/t.SQpIXdSj.dNJM.Z0hl9VT0HXlBMUS/e",
+    "role": "ADMIN"
+  },
+  {
+    "_id": "041ff2c8e684138aed344e23",
+    "name": "pedro",
+    "email": "pedroadmin@coder.com",
+    "password": "$2b$10$JR.eZD8.n/Vk/UyL0x04zOeZIX9G0BWJBKlFr4SBQxmVO2LBNkBT.",
+    "role": "ADMIN",
+    "verifyUser": false,
+    "verifyCode": "1234",
+    "isOnline": true,
+    "createdAt": "2024-12-29T23:53:22.599Z",
+    "updatedAt": "2024-12-29T23:53:22.599Z"
+  }
+]

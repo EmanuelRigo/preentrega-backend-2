@@ -67,7 +67,8 @@ const readProductsController = async (req, res) => {
 
   try {
     const response = await readFilteredService(options);
-    console.log("🚀 ~ readProductsController ~ response:", response)
+    console.log("🚀 ~ readProductsController ~ options:", options)
+    
     const message = "PRODUCTS UPDATED";
     
     if (response.docs.length > 0) {

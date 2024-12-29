@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import UserDTO from '../../../dto/user.dto.js';
 
 class ManagerFS {
   constructor(filePath) {
@@ -9,14 +10,14 @@ class ManagerFS {
   async _readFile() {
     try {
       const data = await fs.readFile(this.filePath, 'utf-8');
-      console.log("Contenido del archivo JSON:", data); // Log para ver el contenido del archivo
+      console.log("Contenido del archivo JSON:", data);
       return JSON.parse(data);
     } catch (err) {
       if (err.code === 'ENOENT') {
-        console.log("Archivo no encontrado, devolviendo array vacío."); // Log para archivo no encontrado
+        console.log("Archivo no encontrado, devolviendo array vacío.");
         return [];
       }
-      console.error("Error al leer el archivo:", err); // Log para cualquier otro error
+      console.error("Error al leer el archivo:", err);
       throw err;
     }
   }
@@ -24,28 +25,28 @@ class ManagerFS {
   async _readFileForEmail() {
     try {
       const data = await fs.readFile(this.filePath, 'utf-8');
-      console.log("Contenido del archivo JSON para email:", data); // Log para ver el contenido del archivo
+      console.log("Contenido del archivo JSON para email:", data);
       return { docs: JSON.parse(data), error: null };
     } catch (err) {
       if (err.code === 'ENOENT') {
-        console.log("Archivo no encontrado, devolviendo objeto vacío."); // Log para archivo no encontrado
+        console.log("Archivo no encontrado, devolviendo objeto vacío.");
         return { docs: [], error: null };
       } else if (err instanceof SyntaxError) {
-        console.error("Formato JSON inválido:", err); // Log para error de formato JSON
+        console.error("Formato JSON inválido:", err);
         return { docs: [], error: 'Invalid JSON format' };
       }
-      console.error("Error al leer el archivo:", err); // Log para cualquier otro error
+      console.error("Error al leer el archivo:", err);
       return { docs: [], error: err.message };
     }
   }
 
   async _writeFile(data) {
     try {
-      console.log("Escribiendo datos en el archivo JSON:", JSON.stringify(data, null, 2)); // Log para ver los datos que se están escribiendo
+      console.log("Escribiendo datos en el archivo JSON:", JSON.stringify(data, null, 2));
       await fs.writeFile(this.filePath, JSON.stringify(data, null, 2));
-      console.log("Archivo JSON escrito con éxito."); // Log para escritura exitosa
+      console.log("Archivo JSON escrito con éxito.");
     } catch (err) {
-      console.error("Error al escribir el archivo:", err); // Log para error de escritura
+      console.error("Error al escribir el archivo:", err);
       throw err;
     }
   }
@@ -104,9 +105,10 @@ class ManagerFS {
   create = async (data) => {
     try {
       const docs = await this._readFile();
-      docs.push(data);
+      const userDTO = new UserDTO(data);
+      docs.push(userDTO);
       await this._writeFile(docs);
-      return data;
+      return userDTO;
     } catch (error) {
       throw error;
     }
@@ -173,7 +175,6 @@ class ManagerFS {
       const docs = await this._readFile();
       const cart = docs.find(item => item._id === id);
       if (cart) {
-        // Simulate population
         cart.products = cart.products.map(product => {
           return { ...product, _id: { /* populated product data */ } };
         });
