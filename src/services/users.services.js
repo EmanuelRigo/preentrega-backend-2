@@ -5,7 +5,9 @@ const { UsersManager } = dao;
 
 async function createService(data) {
   data = new UserDTO(data);
-  const response = await UsersManager.create(data);
+  console.log("🚀 ~ createService ~ data :", data )
+  const response = await UsersManager.createUser(data,"user");
+  console.log("🚀 ~ createService ~ response:", response)
   return response;
 }
 

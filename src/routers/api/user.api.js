@@ -7,13 +7,15 @@ import {
 } from "../../controller/users.controllers.js";
 
 class UsersApiRouter extends CustomRouter {
+
   constructor() {
     super();
     this.init();
   }
+  
   init = () => {
-    this.create("/", ["ADMIN"], createUserController);
-    this.read("/", ["ADMIN"], readUsersController);
+    this.create("/", ["PUBLIC"], createUserController);
+    this.read("/", ["PUBLIC"], readUsersController);
     this.update("/:id", ["USER", "ADMIN"], updateUserController);
     this.destroy("/:id", ["USER", "ADMIN"], destroyUserController);
   };

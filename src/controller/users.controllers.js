@@ -8,6 +8,7 @@ import {
 async function createUserController(req, res) {
   const message = "USER CREATED";
   const data = req.body;
+  console.log("🚀 ~ createUserController ~ data:", data)
   const response = await createService(data);
   return res.status(201).json({ response, message });
 }

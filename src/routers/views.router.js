@@ -34,6 +34,7 @@ router.get("/products", async (req, res) => {
 //ok
 router.get("/products/:pid", async (req, res) => {
   const pid = req.params.pid;
+  console.log("pid:", pid)
   try {
     let url = `http://localhost:9000/api/products/${pid}`;
     const response = await fetch(url);

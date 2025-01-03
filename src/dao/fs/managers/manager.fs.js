@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import UserDTO from '../../../dto/user.dto.js';
+import CartDTO from '../../../dto/cart.dto.js';
 
 class ManagerFS {
   constructor(filePath) {
@@ -10,7 +11,6 @@ class ManagerFS {
   async _readFile() {
     try {
       const data = await fs.readFile(this.filePath, 'utf-8');
-      console.log("Contenido del archivo JSON:", data);
       return JSON.parse(data);
     } catch (err) {
       if (err.code === 'ENOENT') {
@@ -25,7 +25,6 @@ class ManagerFS {
   async _readFileForEmail() {
     try {
       const data = await fs.readFile(this.filePath, 'utf-8');
-      console.log("Contenido del archivo JSON para email:", data);
       return { docs: JSON.parse(data), error: null };
     } catch (err) {
       if (err.code === 'ENOENT') {
@@ -64,8 +63,6 @@ class ManagerFS {
     try {
       const { limit, page, sort, filter } = options;
       const docs = await this._readFile();
-      console.log("🚀 ~ ManagerFS ~ getFiltered= ~ docs :", docs );
-
       let filteredData = docs;
       if (filter) {
         filteredData = docs.filter(item => {
@@ -102,13 +99,18 @@ class ManagerFS {
     }
   };
 
-  create = async (data) => {
+  create = async (data, type = 'user') => {
     try {
       const docs = await this._readFile();
-      const userDTO = new UserDTO(data);
-      docs.push(userDTO);
+      let dto;
+      if (type === 'user') {
+        dto = new UserDTO(data);
+      } else if (type === 'cart') {
+        dto = new CartDTO(data);
+      }
+      docs.push(dto);
       await this._writeFile(docs);
-      return userDTO;
+      return dto;
     } catch (error) {
       throw error;
     }

@@ -2,7 +2,7 @@
 import CartDTO from "../dto/cart.dto.js";
 import dao from "../dao/factory.js";
 const { CartsManager } = dao;
-console.log("🚀 ~ CartsManager :", CartsManager )
+
 
 
 async function readService(data) {
@@ -22,6 +22,8 @@ async function readOneService(id) {
 
 async function createCartService(data) {
   data = new CartDTO(data);
+  console.log("🚀 ~ createCartService ~ data222:", data)
+  
   const response = await CartsManager.create(data);
   return response;
 }

@@ -1,11 +1,2 @@
 [
-  {
-    "_id": { "$oid": "6771d6f4a531059c0e4cf735" },
-    "user_id": { "$oid": "67702137306adb0868dcac25" },
-    "products": [],
-    "state": "reserved",
-    "createdAt": { "$date": { "$numberLong": "1735401969834" } },
-    "updatedAt": { "$date": { "$numberLong": "1735401969834" } },
-    "__v": { "$numberInt": "0" }
-  }
 ]

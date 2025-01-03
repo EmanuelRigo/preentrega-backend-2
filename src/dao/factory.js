@@ -6,23 +6,6 @@ const { persistence } = argsUtil;
 let dao = {};
 
 switch (persistence) {
-  // case "memory":
-  //   console.log("connected to memory");
-  //   const { default: ProductsManagerMemory } = await import(
-  //     "./memory/ProductsManager.memory.js"
-  //   );
-  //   const { default: UsersManagerMemory } = await import(
-  //     "./memory/UsersManager.memory.js"
-  //   );
-  //   const { default: CartsManagerMemory } = await import(
-  //     "./memory/CartsManager.memory.js"
-  //   );
-  //   dao = {
-  //     ProductsManager: ProductsManagerMemory,
-  //     UsersManager: UsersManagerMemory,
-  //     CartsManager: CartsManagerMemory,
-  //   };
-  //   break;
   case "fs":
     console.log("connected to FS");
     const { default: ProductsManagerFS } = await import(
